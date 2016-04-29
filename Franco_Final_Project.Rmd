@@ -29,6 +29,7 @@ library(tidyr)
 library(ggplot2)
 library(xlsx)
 library(readr)
+library(reshape)
 ```
 
 
@@ -60,7 +61,20 @@ vehicles %>%
   geom_smooth()
   
 # Download Electricity Price Data
-elec_price_historical <- t(read_csv("Average_retail_price_of_electricity.csv", skip=5))
+state_elec_price_historical <- read_csv("Average_retail_price_of_electricity.csv", skip=5)
+names(state_elec_price_historical)[1] <- "State"
+state_elec_price_historical <- melt(state_elec_price_historical, id = "State")
+
+us_elec_price_historical <- read_csv("Average_retail_price_of_electricity_annual.csv", skip=4)
+names(us_elec_price_historical)[2] <- "centsPerKWh"
+
+# Download Gasoline Price Data
+us_gas_price_historical <- read.xlsx("fotw#915_web.xlsx", sheetIndex = 1, startRow = 7)
+us_gas_price_historical <- us_gas_price_historical %>%
+  select(Year, Retail.Gasoline.Price...Current.dollars.gallon.) %>%
+  filter(Retail.Gasoline.Price...Current.dollars.gallon. > 0)
+  names(us_gas_price_historical) <- c("Year", "Price")
+  
 
 ```
 
@@ -85,11 +99,19 @@ vehicles %>%
     
   
 ## Electric Vehicles
-  
+cpm_elec <-   
   # Dollars Per Killowatthour ($/kwh)
   
   # Miles Per Killowatthour (M/kwh)
-
+  M_kwh <- vehicles %>%
+    filter(combE >0)
+  
+  M_kwh %>%
+    ggplot(aes(year, combE)) +
+    geom_point() +
+    geom_smooth()
+  
+  
 ```
 
 
