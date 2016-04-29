@@ -5,7 +5,95 @@ date: "April 16, 2016"
 output: html_document
 ---
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+# Overview and Motivation
+
+
+Standing in line for the Tesla Model 3 last month, I became one of the over 300,000 people to reserve the company's first "mass-market" long range electric vehicles in the first week of reservations. As electric cars prepare to play a larger role in the market, it is important to understand how commodity prices and the electricity system in the US will interact with the demand for and viability of electric vehicles. 
+
+I have worked professionally in energy and electricity market consulting for the past five years and have developed an understanding of how the various pieces of the electricity system fit together. This experience will help me contextualize my data and analysis. In addition to my professional work, I am environmentally conscious and passionate about technology and "green innovations".
+
+The 2015 Paris Agreement called for an aggressive reduction in global carbon emissions and two of the sectors most responsible for emitting CO2 are the electricity and transportation sectors. It is important to understand that while electric cars can do a great deal with respect to reducing carbon emissions in the transportation sector, the net impact is not as simple. While our electricity system is still reliant on fossil fuels, any emissions impact from the transition to electric vehicles will be mitigated by the fact that additional electricity will need to be generated to charge those batteries.
+
+# Related Work
+
+# Initial Questions
+
+# Data
+
+The data sources for this project include the 
+# Exploratory Analysis
+```{r Libraries, echo=FALSE, message=FALSE}
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(xlsx)
+library(readr)
+```
+
+
+```{r Exploratory Analysis}
+# Open and Unzip Data From U.S. Department of Energy
+temp <- tempfile()
+download.file("http://www.fueleconomy.gov/feg/epadata/vehicles.csv.zip", temp, mode="wb")
+unzip(temp, "vehicles.csv")
+vehicles <- read.table("vehicles.csv", sep=",", header=T)
+
+download.file("http://www.fueleconomy.gov/feg/epadata/emissions.csv.zip", temp, mode="wb")
+unzip(temp, "emissions.csv")
+emissions <- read.table("emissions.csv", sep=",", header=T)
+
+# Merge Vehicle and Emission Data Sets
+merged <- vehicles %>%
+  left_join(emissions, by = "id")
+
+# Download EV Data
+download.file("http://www.afdc.energy.gov/uploads/data/data_source/10567/10567_pev_sales.xlsx", temp, mode="wb")
+test <- read.xlsx("10567_pev_sales.xlsx", sheetIndex=1, startRow = 3)
+
+# Explore Vehicles
+
+vehicles %>%
+  filter()
+  ggplot(aes(year, UCity)) +
+  geom_point() +
+  geom_smooth()
+  
+# Download Electricity Price Data
+elec_price_historical <- t(read_csv("Average_retail_price_of_electricity.csv", skip=5))
+
+```
+
+### Emissions Per Mile
+```{r Emissions Per Mile}
+
+vehicles %>%
+  ggplot(aes(year, co2A)) +
+  geom_point() +
+  geom_smooth()
+
+```
+
+### Cost Per Mile
+```{r Cost Per Mile}
+
+## Internal Combustion Engines
+
+  # Dollars Per Gallon ($/gal)
+  
+  # Miles Per Gallon (MPG)
+    
+  
+## Electric Vehicles
+  
+  # Dollars Per Killowatthour ($/kwh)
+  
+  # Miles Per Killowatthour (M/kwh)
+
+```
+
+
+# Final Analysis
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
@@ -17,6 +105,10 @@ You can also embed plots, for example:
 
 ```{r, echo=FALSE}
 plot(cars)
+
+#http://www.fueleconomy.gov/feg/epadata/vehicles.csv.zip
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+##  
