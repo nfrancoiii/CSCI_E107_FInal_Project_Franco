@@ -90,30 +90,44 @@ vehicles %>%
 
 ### Internal Combustion Cost Per Mile
 
-```{r ICE Cost Per Mile}
+```{r ICE Cost Per Mile, warning=FALSE}
 
 ## Internal Combustion Engines
 
   # Dollars Per Gallon ($/gal)
   dol_gal <- as.data.frame(us_gas_price_historical)
+  dol_gal$Year <- as.numeric(levels(dol_gal$Year)[dol_gal$Year])
   
   # Miles Per Gallon (MPG)
     mpg <- vehicles %>%
-    filter(combE != 0)
+    filter(combE == 0)
   
   mpg %>%
     ggplot(aes(year, comb08)) +
     geom_point() +
-    geom_smooth()
+    geom_smooth() +
+    xlab("Year") +
+    ylab("Miles per Gallon") +
+    ggtitle("Miles per Gallon of All Models")
   
   # Dollars per Mile
   ice_merged <- mpg %>%
-    left_join(dol_gal, by=c("year" = "Year"))
+    left_join(dol_gal, by=c("year" = "Year")) %>%
+    mutate(CentsPerMile = Price*100/comb08)
+  
+  ice_merged %>%
+    ggplot(aes(year, CentsPerMile)) +
+    geom_point() +
+    geom_smooth() + 
+    xlab("Year") +
+    ylab("Cents per Mile") +
+    ggtitle("Internal Combustion Engine Cost per Mile (Cents per Mile)")
+  
 ```
 
 ### Electric Vehicles Cost Per 100 Miles
 
-```{r Electric Vehciles}
+```{r Electric Vehciles, warning=FALSE}
 ## Electric Vehicles
   
   # Dollars Per Killowatthour ($/kwh)
@@ -151,16 +165,32 @@ vehicles %>%
   # Dollars per mile
   elec_merged <- kwh_100m %>%
     left_join(dol_kwh, by=c("year" = "Year")) %>%
-    mutate(centsPerMile = combE*centsPerKWh)
+    mutate(centsPerMile = (combE/100)*centsPerKWh)
   
   elec_merged %>%
     ggplot(aes(year, centsPerMile)) +
     geom_point() +
     geom_smooth() + 
     xlab("Year") +
-    ylab("Cents Per 100 Miles") +
-    ggtitle("Cost per  100 Miles for Electric Vehicles")
+    ylab("Cents Per Mile") +
+    ggtitle("Cost per Mile for Electric Vehicles")
   
+```
+
+### Electric v. ICE Cost per Mile
+
+```{r Electric v ICE, warning=FALSE}
+  
+  ggplot() +
+    geom_smooth(aes(elec_merged$year, elec_merged$centsPerMile, color="Electric")) +
+    geom_smooth(aes(ice_merged$year,ice_merged$CentsPerMile, color="ICE")) +
+    scale_color_manual("",
+                       breaks = c("Electric", "ICE"),
+                       values = c("blue", "brown")) +
+    xlab("Year") +
+    ylab("Cents per Mile") +
+    ggtitle("Comparison of Electric and ICE Cars by Cost per Mile")
+    
 ```
 
 
