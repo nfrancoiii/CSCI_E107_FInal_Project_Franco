@@ -88,7 +88,15 @@ vehicles %>%
 
 ```
 
+## Cost Per Mile Driven
+
+One way to compare the cost benefits of electric vehicles against ICE vehicles is by estimating the cost to drive a mile in each. For this, we rely on data from the U.S. Department of Energy and their fuel economy data set. This data set provides us with the efficiency of cars in terms of miles per gallon (mpg) for ICE vehicles and killowatthours (kwh) per 100 miles driven. For estimates of costs of the fuels for each, we need a monetary value for a gallon of gasline as well as for the cost of a kwh of electricity. We rely on the U.S. Department of Energy Vehicle Technology Office for average historical prices of gasoline in the United States.  For estimates of average historical prices of electricity in the United States, we use data from the U.S. Energy Information Administration (EIA).
+
 ### Internal Combustion Cost Per Mile
+
+In order to calculate the cost per mile for ICE vehicles we will need to use information on vehicle efficiency as measured by mpg and the cost of the inputs, gasoline in this case. Our formula will then be: $$\frac{\frac{$}{gallon}}{\frac{miles}{gallon}}$$
+
+The above equation become: $$\frac{$}{gallon} x \frac{gallon}{miles} = \frac{$}{miles}$$
 
 ```{r ICE Cost Per Mile, warning=FALSE}
 
@@ -98,6 +106,18 @@ vehicles %>%
   dol_gal <- as.data.frame(us_gas_price_historical)
   dol_gal$Year <- as.numeric(levels(dol_gal$Year)[dol_gal$Year])
   
+  dol_gal %>%
+    filter(Year >= 1980) %>%
+    ggplot(aes(Year, Price)) +
+    geom_line(color="brown") +
+    ylab("Dollars per Gallon") +
+    ggtitle("U.S. Average Historical Price per Gallon of Gasoline")
+  
+```
+
+The chart above shows that gasoline prices were relatively low through the 1980s and 90s and began to climb in the early 2000s until peaking in 2012. Since 2012 prices have been on a decline.
+
+```{r}
   # Miles Per Gallon (MPG)
     mpg <- vehicles %>%
     filter(combE == 0)
@@ -105,11 +125,16 @@ vehicles %>%
   mpg %>%
     ggplot(aes(year, comb08)) +
     geom_point() +
-    geom_smooth() +
+    geom_smooth(color="brown") +
     xlab("Year") +
     ylab("Miles per Gallon") +
     ggtitle("Miles per Gallon of All Models")
-  
+
+```  
+
+We can see that efficiency for all ICE vehciles has increased slightly over the most recent 5 years or so.
+
+```{r}
   # Dollars per Mile
   ice_merged <- mpg %>%
     left_join(dol_gal, by=c("year" = "Year")) %>%
@@ -118,14 +143,18 @@ vehicles %>%
   ice_merged %>%
     ggplot(aes(year, CentsPerMile)) +
     geom_point() +
-    geom_smooth() + 
+    geom_smooth(color="brown") + 
     xlab("Year") +
     ylab("Cents per Mile") +
     ggtitle("Internal Combustion Engine Cost per Mile (Cents per Mile)")
   
 ```
 
+We can see in the chart 
+
 ### Electric Vehicles Cost Per 100 Miles
+
+
 
 ```{r Electric Vehciles, warning=FALSE}
 ## Electric Vehicles
