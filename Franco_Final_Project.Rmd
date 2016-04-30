@@ -55,15 +55,15 @@ test <- read.xlsx("10567_pev_sales.xlsx", sheetIndex=1, startRow = 3)
 # Explore Vehicles
 
 vehicles %>%
-  filter()
   ggplot(aes(year, UCity)) +
   geom_point() +
   geom_smooth()
   
 # Download Electricity Price Data
-state_elec_price_historical <- read_csv("Average_retail_price_of_electricity.csv", skip=5)
-names(state_elec_price_historical)[1] <- "State"
-state_elec_price_historical <- melt(state_elec_price_historical, id = "State")
+  #state_elec_price_historical <- read_csv("Average_retail_price_of_electricity.csv", skip=5)
+  #names(state_elec_price_historical)[1] <- "State"
+  #state_elec_price_historical <- melt(state_elec_price_historical, id = "State")
+
 
 us_elec_price_historical <- read_csv("Average_retail_price_of_electricity_annual.csv", skip=4)
 names(us_elec_price_historical)[2] <- "centsPerKWh"
@@ -88,29 +88,78 @@ vehicles %>%
 
 ```
 
-### Cost Per Mile
-```{r Cost Per Mile}
+### Internal Combustion Cost Per Mile
+
+```{r ICE Cost Per Mile}
 
 ## Internal Combustion Engines
 
   # Dollars Per Gallon ($/gal)
+  dol_gal <- as.data.frame(us_gas_price_historical)
   
   # Miles Per Gallon (MPG)
-    
+    mpg <- vehicles %>%
+    filter(combE != 0)
   
-## Electric Vehicles
-cpm_elec <-   
-  # Dollars Per Killowatthour ($/kwh)
-  
-  # Miles Per Killowatthour (M/kwh)
-  M_kwh <- vehicles %>%
-    filter(combE >0)
-  
-  M_kwh %>%
-    ggplot(aes(year, combE)) +
+  mpg %>%
+    ggplot(aes(year, comb08)) +
     geom_point() +
     geom_smooth()
   
+  # Dollars per Mile
+  ice_merged <- mpg %>%
+    left_join(dol_gal, by=c("year" = "Year"))
+```
+
+### Electric Vehicles Cost Per 100 Miles
+
+```{r Electric Vehciles}
+## Electric Vehicles
+  
+  # Dollars Per Killowatthour ($/kwh)
+  dol_kwh <- us_elec_price_historical
+
+  # Augment Data for 2016
+  price_2016 <- us_elec_price_historical %>%
+  filter(Year >= 2014) %>%
+  summarise(centsPerKWh =mean(centsPerKWh))
+
+  dat_2016 <- as.data.frame(c(2016, price_2016))
+    names(dat_2016) <- names(dol_kwh)
+
+  dol_kwh <- us_elec_price_historical %>%
+  rbind(dat_2016)
+  
+  dol_kwh %>%
+    ggplot(aes(Year, centsPerKWh)) +
+    geom_point() +
+    ylab("Cents per kWh") +
+    ggtitle("Average Annual U.S. Electricity Prices")
+
+  #  Killowatthour/100 miles (kwh/100m)
+  kwh_100m <- vehicles %>%
+    filter(combE > 0)
+  
+  kwh_100m %>%
+    ggplot(aes(year, combE)) +
+    geom_point() +
+    geom_smooth() +
+    xlab("Year") +
+    ylab("kWh per 100 Miles") +
+    ggtitle("Electric Vehicle Killowatthours per 100 Miles")
+  
+  # Dollars per mile
+  elec_merged <- kwh_100m %>%
+    left_join(dol_kwh, by=c("year" = "Year")) %>%
+    mutate(centsPerMile = combE*centsPerKWh)
+  
+  elec_merged %>%
+    ggplot(aes(year, centsPerMile)) +
+    geom_point() +
+    geom_smooth() + 
+    xlab("Year") +
+    ylab("Cents Per 100 Miles") +
+    ggtitle("Cost per  100 Miles for Electric Vehicles")
   
 ```
 
