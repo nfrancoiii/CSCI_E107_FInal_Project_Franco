@@ -314,13 +314,45 @@ Electric vehicles produce no CO2 at the tailpipe. EVs, in fact, do not even have
 
 ```{r EV CO2 per Mile}
   
+  # Scrap EIA Table for CO2 per kWh
+  
   url <- "https://www.eia.gov/tools/faqs/faq.cfm?id=74&t=11"
   co2_kwh <- url %>% read_html() %>% html_node(xpath ='//*[@id="innerX"]/div/div[3]/div[1]/table') %>% html_table()
-  
   co2_kwh <- co2_kwh %>%
     filter(Fuel != "Coal")
   co2_kwh$Fuel <- str_trim(as.character(co2_kwh$Fuel), "l")
   
+  # kWh per Mile
+  elec_merged_trim <- elec_merged_trim %>%
+    mutate(kwh_m = combE / 100)
+  
+  # Combine EV data with CO2 per kWh and convert to grams
+  
+  grams_per_lb <- 453.593 ## Source: Google
+  
+  elec_merged_trim <- elec_merged_trim %>%
+    mutate(bit_co2_m = kwh_m*co2_kwh$`Pounds of CO2 per kWh`[1]*grams_per_lb,
+           subbit_co2_m = kwh_m*co2_kwh$`Pounds of CO2 per kWh`[2]*grams_per_lb,
+           lig_co2_m = kwh_m*co2_kwh$`Pounds of CO2 per kWh`[3]*grams_per_lb,
+           ng_co2_m = kwh_m*co2_kwh$`Pounds of CO2 per kWh`[4]*grams_per_lb,
+           fo2_co2_m = kwh_m*co2_kwh$`Pounds of CO2 per kWh`[5]*grams_per_lb,
+           fo6_co2_m = kwh_m*co2_kwh$`Pounds of CO2 per kWh`[6]*grams_per_lb)
+  
+  # Graph CO2 per Mile for EVs for each 
+  elec_merged_trim %>%
+    ggplot(aes(x=year)) +
+    geom_smooth(aes(y=bit_co2_m, color="Bituminous")) +
+    geom_smooth(aes(y=subbit_co2_m, color="Subbituminous")) +
+    geom_smooth(aes(y=lig_co2_m, color="Lignite")) +
+    geom_smooth(aes(y=ng_co2_m, color="Natural Gas")) +
+    geom_smooth(aes(y=fo2_co2_m, color="Fuel Oil No. 2")) +
+    geom_smooth(aes(y=fo6_co2_m, color="Fuel Oil No. 6")) +
+    scale_color_manual("", 
+                       breaks = c("Bituminous", "Subbituminous", "Lignite", "Natural Gas", "Fuel Oil No. 2", "Fuel Oil No. 6"),
+                       values = c("brown", "darkgreen", "black", "red", "blue", "orange")) +
+    ylab("Grams Per Mile") +
+    xlab("Year") +
+    ggtitle("CO2 per Mile for EVs by Electricity Source")
 ```
 
 
