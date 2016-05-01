@@ -177,7 +177,7 @@ We can see in the chart
   
   dol_kwh %>%
     ggplot(aes(Year, centsPerKWh)) +
-    geom_line() +
+    geom_line(color="blue") +
     ylab("Cents per kWh") +
     ggtitle("Average Annual U.S. Electricity Prices")
 
@@ -353,6 +353,25 @@ Electric vehicles produce no CO2 at the tailpipe. EVs, in fact, do not even have
     ylab("Grams Per Mile") +
     xlab("Year") +
     ggtitle("CO2 per Mile for EVs by Electricity Source")
+```
+
+## Compare CO2 Per Mile of ICE and EVs
+
+```{r Comparison of CO2 per Mile}
+
+  # Comparison of CO2 per Mile
+  ggplot()+
+    geom_smooth(aes(x=ice_comparable_trim$year, y=ice_comparable_trim$co2TailpipeGpm, color="ICE Vehicles")) +
+    geom_smooth(aes(x=elec_merged_trim$year, y=elec_merged_trim$bit_co2_m, color="EV (Bituminous)")) +
+    geom_smooth(aes(x=elec_merged_trim$year, y=elec_merged_trim$fo2_co2_m, color="EV (FO2)")) +
+    geom_smooth(aes(x=elec_merged_trim$year, y=elec_merged_trim$ng_co2_m, color="EV (NG)")) +
+    scale_color_manual("",
+                       breaks = c("ICE Vehicles", "EV (Bituminous)", "EV (FO2)", "EV (NG)"),
+                       values = c("brown", "orange", "black", "blue")) +
+    xlab("Year") +
+    ylab("Grams per Mile") +
+    ggtitle("Comparison of CO2 Emissions per Mile Over Time")
+  
 ```
 
 
