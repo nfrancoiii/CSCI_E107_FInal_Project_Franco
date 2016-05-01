@@ -30,6 +30,8 @@ library(ggplot2)
 library(xlsx)
 library(readr)
 library(reshape)
+library(rvest)
+library(stringr)
 ```
 
 
@@ -175,9 +177,15 @@ We can see in the chart
   
   dol_kwh %>%
     ggplot(aes(Year, centsPerKWh)) +
-    geom_point() +
+    geom_line() +
     ylab("Cents per kWh") +
     ggtitle("Average Annual U.S. Electricity Prices")
+
+```
+
+
+
+```{r}
 
   #  Killowatthour/100 miles (kwh/100m)
   kwh_100m <- vehicles %>%
@@ -220,6 +228,99 @@ We can see in the chart
     ylab("Cents per Mile") +
     ggtitle("Comparison of Electric and ICE Cars by Cost per Mile")
     
+```
+
+
+Now, the fleet of electric car options available is not as wide as those for ICE vehicles. We will limit out data set in two ways; one where we include only the vehicle classes where there is an EV option and another where we include only the vehicle classes for which there are more than 10 EV options.
+
+```{r Subset of ICE Cars, warning=FALSE}
+  
+  # Create Unique List of VClasses for EVs
+  elec_type <- elec_merged %>%
+    select(VClass) %>%
+    group_by(VClass) %>%
+    summarize(Count = n())
+  elec_type
+  trim_elec_type <- elec_type %>%
+    filter(Count > 10)
+  trim_elec_type
+  
+  elec_merged_trim <- elec_merged %>%
+    filter(VClass %in% trim_elec_type$VClass)
+  
+  # Trim the ICE data to only include comparable cars
+  ice_comparable <- ice_merged %>%
+    filter(VClass %in% elec_type$VClass)
+  
+  ice_comparable_trim <- ice_merged %>%
+    filter(VClass %in% trim_elec_type$VClass)
+
+  # Cost per Mile for Groups of ICE Vehicles
+  ggplot() +
+    geom_smooth(aes(ice_merged$year, ice_merged$CentsPerMile, color="All Classes")) +
+    geom_smooth(aes(ice_comparable$year, ice_comparable$CentsPerMile, color="Classes with EV Option")) +
+    geom_smooth(aes(ice_comparable_trim$year, ice_comparable_trim$CentsPerMile, color="Classes with > 10 EV Options")) +
+  scale_color_manual("",
+                     breaks = c("All Classes", "Classes with EV Option", "Classes with > 10 EV Options"),
+                     values = c("brown", "blue", "black")) +
+    ylab("Year") +
+    xlab("Cents per Mile") +
+    ggtitle("Cost per Mile for Groups of ICE Vehicles")
+    
+    
+  # Comparison of Electric and ICE Cars by Cost per Mile (Assuming Same Vehicle Class)
+  ggplot() +
+    geom_smooth(aes(elec_merged_trim$year, elec_merged_trim$centsPerMile, color="Electric")) +
+    geom_smooth(aes(ice_comparable_trim$year,ice_comparable_trim$CentsPerMile, color="ICE")) +
+    scale_color_manual("",
+                       breaks = c("Electric", "ICE"),
+                       values = c("blue", "black")) +
+    xlab("Year") +
+    ylab("Cents per Mile") +
+    ggtitle("Comparison of Electric and ICE Cars by Cost per Mile Comparing Same Vehicle Classes")
+ 
+```
+
+Even when we directly compare vehicle classes, electric vehicles are less costly to operate per mile driven, especially in the period of high gasoline prices as was seen through out the first decade of the century. 
+
+## Emissions Comparison
+
+Global warming is caused by increased greenhouse gases that allow heat from the sun to permeate to earth, but prevent that heat from escaping when reflected off the earth's surface. Atmospheric greenhouse gases have increased at alarming rates since the industrial revolution and the scientific community has concluded that we need to drastically cut back on burning fossil fuels; a process which releases carbon dioxide (CO2) a greehouse gas.
+
+While it may seem obvious that an ICE vehicle emits more CO2 than an electric vehice, it is a bit more complicated. Since the electricity produced to "fuel" electric vehicles does not always come from renewable sources, there are indeed CO2 emissions related to operating an electric vehicle. In this section, we will compare the tailpipe emissions of CO2 per mile of comparable ICE vehicles and CO2 emissions related to producing the energy required to move an electric vehicle a mile.
+
+### ICE Vehicle Tailpipe Emissions
+
+There are emissions directly related to the operation of ICE vehicles in that when gasoline is burned to fuel the engine, CO2 is released from the tailpipe. Our data set from the U.S. Department of Energy provides information on tailpipe emissions in grams of CO2 per mile.
+
+```{r ICE CO2 per Mile}
+  
+  # ICE CO2 per mile
+  ice_comparable_trim %>%
+    ggplot(aes(year, co2TailpipeGpm)) +
+    geom_point() +
+    geom_smooth(color="brown") +
+    xlab("Year") +
+    ylab("Grams per Mile") +
+    ggtitle("CO2 per Mile for Comparable Class ICE Vehicles")
+    
+```
+
+We can see in the chart above that comparable ICE vehicles have remained failry steady in their emissions per mile driven over the last thirty years. However, we have seem that in the last five years a slight improvement in tailpipe emissions.
+
+### EV Tailpipe Emissions
+
+Electric vehicles produce no CO2 at the tailpipe. EVs, in fact, do not even have tailpipes. However, CO2 is generally burned in order to create the electricity used to charge the battery in an EV. 
+
+```{r EV CO2 per Mile}
+  
+  url <- "https://www.eia.gov/tools/faqs/faq.cfm?id=74&t=11"
+  co2_kwh <- url %>% read_html() %>% html_node(xpath ='//*[@id="innerX"]/div/div[3]/div[1]/table') %>% html_table()
+  
+  co2_kwh <- co2_kwh %>%
+    filter(Fuel != "Coal")
+  co2_kwh$Fuel <- str_trim(as.character(co2_kwh$Fuel), "l")
+  
 ```
 
 
