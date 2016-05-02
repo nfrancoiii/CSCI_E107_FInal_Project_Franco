@@ -20,7 +20,23 @@ The 2015 Paris Agreement called for an aggressive reduction in global carbon emi
 
 # Data
 
-The data sources for this project include the 
+This section will discuss the sources of data used for this analysis as well as the methods used for wrangling and preparing the data for the analysis. In addition to the data details described, explanations for specific methodologies will be provided through out the analysis to clarify decisions and processes as necessary. 
+
+### Sources
+
+In an effort to make this analysis as reproducible as possible, all sources of data used here are publicly available. 
+
+Throughout the analysis, we rely heavily on the website FuelEconomy.gov, which is the official U.S. government source for fuel economy information. This website is provided under the U.S. Department of Energy.  Specifically we rely on the information provided in the "Vehicle" data set which contains information for 1984-current model year vehicles. This data set contains information central to the analysis such as the efficiency of all vehicles, as measured in miles per gallon (mpg) for internal combustion engine vehicles (ICE) and in killowatthours per 100 miles for electric vehicles. This data set also contains information on the amount of carbon dioxide emitted at the tailpipe for ICE vehicles.
+
+In addition to the U.S. DOE vehicles data set, we rely on the U.S. Energy Information Adminstration for data on average annual U.S. retail electricity prices and the carbon dioxide intensity of various electricity generating unit fuel types. This information is used to calculate the carbon dioxide equivalent emissions of driving an electric vehicle. 
+Unfortunately, some data that would be quite interesting, useful and relevant for this analysis is not publicly available. For example, data and statistics on car sales by make and model are generally not available publicly and only for purchase. In the spirit of performing a reproducible analysis, it seems appropriate to exclude such data source even though it precludes me from perfoming certain analyses that I had hoped to perform and mentioned in my project proposal; notably, the regression analysis. I will instead discuss this issue conceptually in the "XXXXXX" section. 
+
+### Methods
+
+Throughout my data collection, I encountered data of interest in a variety of formats. This fact required a variety of data wrangling methodologies. In order to provide a readable and complete methodology for gathering my data, I made every effort to codify my data collection. 
+
+In the case of my main dataset, the "vehicles" data from the U.S. DOE, the data is available for download as a zipped comma-separated values file. For this case, I was able to directly download the zipped data file into a temporary file, unzip the file and read the file in as a table using the `readr` library.
+
 # Exploratory Analysis
 ```{r Libraries, echo=FALSE, message=FALSE}
 
