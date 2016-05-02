@@ -5,6 +5,19 @@ date: "April 16, 2016"
 output: html_document
 ---
 
+```{r Libraries, echo=FALSE, message=FALSE}
+# Load Libraries
+  library(dplyr)
+  library(tidyr)
+  library(ggplot2)
+  library(xlsx)
+  library(readr)
+  library(reshape)
+  library(rvest)
+  library(stringr)
+```
+
+
 # Overview and Motivation
 
 
@@ -15,6 +28,31 @@ I have worked professionally in energy and electricity market consulting for the
 The 2015 Paris Agreement called for an aggressive reduction in global carbon emissions and two of the sectors most responsible for emitting CO2 are the electricity and transportation sectors. It is important to understand that while electric cars can do a great deal with respect to reducing carbon emissions in the transportation sector, the net impact is not as simple. While our electricity system is still reliant on fossil fuels, any emissions impact from the transition to electric vehicles will be mitigated by the fact that additional electricity will need to be generated to charge those batteries.
 
 # Related Work
+
+Electric car sales in the United States and globally have begun to take off as companies like Tesla have made great strides in removing the two largest barriers to EV ownership: range and infrastructure. Electric cars are now approaching 300 miles of range on a single charge and the industry expects advancements over the next decade may make electric vehicles more appealing that gasoline cars.  Additionally, private companies have taken on expanding the network of electric charging stations. As such, we have seen the number of EV sales ramp up with no signs of slowing.
+
+```{r U.S. Electric Car Sales}
+
+  #U.S. Electric Car Sales
+    temp <- tempfile()
+    download.file("http://www.afdc.energy.gov/uploads/data/data_source/10567/10567_pev_sales.xlsx", temp, mode="wb")
+    ev_sales <- read.xlsx("10567_pev_sales.xlsx", sheetIndex=1, startRow = 3)
+    names(ev_sales)[1] <- "Model"
+    ev_sales <- melt(ev_sales, id=c("Model", "Type")) %>%
+      filter(value > 0) %>%
+      filter(Model != "Total") %>%
+      filter(variable != "TOTAL")
+      ev_sales$variable <- gsub("X", "", as.character(ev_sales$variable))
+      ev_sales$variable <- as.numeric(ev_sales$variable)
+    names(ev_sales)[3] <- "Year"
+    names(ev_sales)[4] <- "Sales"
+
+    ev_sales %>%
+      ggplot(aes(x=Year, y=Sales, fill=Model)) +
+      geom_bar(stat="identity") +
+      ggtitle("US EV Sales")
+```
+
 
 # Initial Questions
 
@@ -37,18 +75,12 @@ Throughout my data collection, I encountered data of interest in a variety of fo
 
 In the case of my main dataset, the "vehicles" data from the U.S. DOE, the data is available for download as a zipped comma-separated values file. For this case, I was able to directly download the zipped data file into a temporary file, unzip the file and read the file in as a table using the `readr` library.
 
-# Exploratory Analysis
-```{r Libraries, echo=FALSE, message=FALSE}
+The data from the U.S. EIA that provided values for the carbon dioxide intensity of the various electric generating unit fuel types was contained in an html table on the website of the EIA. I used a web scraping technique to pull the table directly into my R workspace by finding the xpath of the data table in the html code and using the `rvest` library to read in the table. 
 
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-library(xlsx)
-library(readr)
-library(reshape)
-library(rvest)
-library(stringr)
-```
+**XXXXX**
+Some of the data from the EIA was available as downloadable microsoft excel files. The data sources in this form included the average annual historial U.S. retail electricity prices and the average annual historical U.S. gasoline prices. In most cases, these excel files did not not begin in the first column and row. Instead, I needed to specify what row was the "startRow" using the functionality provided in the `xlsx` library. I then used the `dplyr` library to clean the data down to what was most important and remove any `NA` columns that had been read in.
+
+# Exploratory Analysis
 
 
 ```{r Exploratory Analysis}
