@@ -27,16 +27,24 @@ I have worked professionally in energy and electricity market consulting for the
 
 The 2015 Paris Agreement called for an aggressive reduction in global carbon emissions and two of the sectors most responsible for emitting CO2 are the electricity and transportation sectors. It is important to understand that while electric cars can do a great deal with respect to reducing carbon emissions in the transportation sector, the net impact is not as simple. While our electricity system is still reliant on fossil fuels, any emissions impact from the transition to electric vehicles will be mitigated by the fact that additional electricity will need to be generated to charge those batteries.
 
+### Overview of This Analysis
+
+This analysis will explore two key concepts surrounding the discussion of electric vehicles in comparison with traditional internal combustion engine (ICE) vehicles. The first concept we will explore is relative cost to operate. At this point, the sticker price for electric vehicles tends to be higher on average than their most comparable ICE vehicle counter part. This upfront cost comparison, however, ignores the costs of operating the car, which as we will see skews sharply in favor of electric vehicles. We can create such a comparison by evaluating the average cost to drive each type of vehicle a mile.
+
+The second concept we will explore is the CO2 emissions per mile of both types of vehicle. While we often think the answer to this is obvious that EVs do not emit any CO2, the reality is that there are CO2 emissions related to the production of the electricity used to charge the batteries in these vehicles. We will see how the CO2 intensity of various types of electricity generating units (EGUs) compare to the tailpipe emissions of traditional ICE vehicles.
+
 # Related Work
 
-Electric car sales in the United States and globally have begun to take off as companies like Tesla have made great strides in removing the two largest barriers to EV ownership: range and infrastructure. Electric cars are now approaching 300 miles of range on a single charge and the industry expects advancements over the next decade may make electric vehicles more appealing that gasoline cars.  Additionally, private companies have taken on expanding the network of electric charging stations. As such, we have seen the number of EV sales ramp up with no signs of slowing.
+Electric car sales in the United States and globally have begun to take off as companies like Tesla have made great strides in removing the two largest barriers to EV ownership: range and infrastructure. Electric cars are now approaching 300 miles of range on a single charge and the industry expects advancements over the next decade may make electric vehicles more appealing that gasoline cars.  Additionally, private companies have taken on expanding the network of electric charging stations. As such, we have seen the number of EV sales ramp up with no signs of slowing as can be seen in the bar chart below.
 
 ```{r U.S. Electric Car Sales}
 
-  #U.S. Electric Car Sales
+  # U.S. Electric Car Sales
     temp <- tempfile()
     download.file("http://www.afdc.energy.gov/uploads/data/data_source/10567/10567_pev_sales.xlsx", temp, mode="wb")
     ev_sales <- read.xlsx("10567_pev_sales.xlsx", sheetIndex=1, startRow = 3)
+    
+    # Clean Data
     names(ev_sales)[1] <- "Model"
     ev_sales <- melt(ev_sales, id=c("Model", "Type")) %>%
       filter(value > 0) %>%
@@ -47,12 +55,14 @@ Electric car sales in the United States and globally have begun to take off as c
     names(ev_sales)[3] <- "Year"
     names(ev_sales)[4] <- "Sales"
 
+    # Stacked Bar Chart
     ev_sales %>%
       ggplot(aes(x=Year, y=Sales, fill=Model)) +
       geom_bar(stat="identity") +
       ggtitle("US EV Sales")
 ```
 
+With the EV market's rapid rise, analyses attempting to answer the 
 
 # Initial Questions
 
@@ -66,19 +76,19 @@ In an effort to make this analysis as reproducible as possible, all sources of d
 
 Throughout the analysis, we rely heavily on the website FuelEconomy.gov, which is the official U.S. government source for fuel economy information. This website is provided under the U.S. Department of Energy.  Specifically we rely on the information provided in the "Vehicle" data set which contains information for 1984-current model year vehicles. This data set contains information central to the analysis such as the efficiency of all vehicles, as measured in miles per gallon (mpg) for internal combustion engine vehicles (ICE) and in killowatthours per 100 miles for electric vehicles. This data set also contains information on the amount of carbon dioxide emitted at the tailpipe for ICE vehicles.
 
-In addition to the U.S. DOE vehicles data set, we rely on the U.S. Energy Information Adminstration for data on average annual U.S. retail electricity prices and the carbon dioxide intensity of various electricity generating unit fuel types. This information is used to calculate the carbon dioxide equivalent emissions of driving an electric vehicle. 
-Unfortunately, some data that would be quite interesting, useful and relevant for this analysis is not publicly available. For example, data and statistics on car sales by make and model are generally not available publicly and only for purchase. In the spirit of performing a reproducible analysis, it seems appropriate to exclude such data source even though it precludes me from perfoming certain analyses that I had hoped to perform and mentioned in my project proposal; notably, the regression analysis. I will instead discuss this issue conceptually in the "XXXXXX" section. 
+In addition to the U.S. DOE vehicles data set, we rely on the U.S. Energy Information Administration for data on average annual U.S. retail electricity prices and the carbon dioxide intensity of various electricity generating unit fuel types. This information is used to calculate the carbon dioxide equivalent emissions of driving an electric vehicle. 
+Unfortunately, some data that would be quite interesting, useful and relevant for this analysis is not publicly available. For example, data and statistics on car sales by make and model are generally not available publicly and only for purchase. In the spirit of performing a reproducible analysis, it seems appropriate to exclude such data source even though it precludes me from performing certain analyses that I had hoped to perform and mentioned in my project proposal; notably, the regression analysis. I will instead discuss this issue conceptually in the "XXXXXX" section. 
 
 ### Methods
 
 Throughout my data collection, I encountered data of interest in a variety of formats. This fact required a variety of data wrangling methodologies. In order to provide a readable and complete methodology for gathering my data, I made every effort to codify my data collection. 
 
-In the case of my main dataset, the "vehicles" data from the U.S. DOE, the data is available for download as a zipped comma-separated values file. For this case, I was able to directly download the zipped data file into a temporary file, unzip the file and read the file in as a table using the `readr` library.
+In the case of my main data set, the "vehicles" data from the U.S. DOE, the data is available for download as a zipped comma-separated values file. For this case, I was able to directly download the zipped data file into a temporary file, unzip the file and read the file in as a table using the `readr` library.
 
-The data from the U.S. EIA that provided values for the carbon dioxide intensity of the various electric generating unit fuel types was contained in an html table on the website of the EIA. I used a web scraping technique to pull the table directly into my R workspace by finding the xpath of the data table in the html code and using the `rvest` library to read in the table. 
+The data from the U.S. EIA that provided values for the carbon dioxide intensity of the various electric generating unit fuel types was contained in an html table on the website of the EIA. I used a web scraping technique to pull the table directly into my R work space by finding the xpath of the data table in the html code and using the `rvest` library to read in the table. 
 
 **XXXXX**
-Some of the data from the EIA was available as downloadable microsoft excel files. The data sources in this form included the average annual historial U.S. retail electricity prices and the average annual historical U.S. gasoline prices. In most cases, these excel files did not not begin in the first column and row. Instead, I needed to specify what row was the "startRow" using the functionality provided in the `xlsx` library. I then used the `dplyr` library to clean the data down to what was most important and remove any `NA` columns that had been read in.
+Some of the data from the EIA was available as downloadable Microsoft excel files. The data sources in this form included the average annual historical U.S. retail electricity prices and the average annual historical U.S. gasoline prices. In most cases, these excel files did not not begin in the first column and row. Instead, I needed to specify what row was the "startRow" using the functionality provided in the `xlsx` library. I then used the `dplyr` library to clean the data down to what was most important and remove any `NA` columns that had been read in.
 
 # Exploratory Analysis
 
@@ -140,7 +150,7 @@ vehicles %>%
 
 ## Cost Per Mile Driven
 
-One way to compare the cost benefits of electric vehicles against ICE vehicles is by estimating the cost to drive a mile in each. For this, we rely on data from the U.S. Department of Energy and their fuel economy data set. This data set provides us with the efficiency of cars in terms of miles per gallon (mpg) for ICE vehicles and killowatthours (kwh) per 100 miles driven. For estimates of costs of the fuels for each, we need a monetary value for a gallon of gasline as well as for the cost of a kwh of electricity. We rely on the U.S. Department of Energy Vehicle Technology Office for average historical prices of gasoline in the United States.  For estimates of average historical prices of electricity in the United States, we use data from the U.S. Energy Information Administration (EIA).
+One way to compare the cost benefits of electric vehicles against ICE vehicles is by estimating the cost to drive a mile in each. For this, we rely on data from the U.S. Department of Energy and their fuel economy data set. This data set provides us with the efficiency of cars in terms of miles per gallon (mpg) for ICE vehicles and killowatthours (kWh) per 100 miles driven. For estimates of costs of the fuels for each, we need a monetary value for a gallon of gasoline as well as for the cost of a kWh of electricity. We rely on the U.S. Department of Energy Vehicle Technology Office for average historical prices of gasoline in the United States.  For estimates of average historical prices of electricity in the United States, we use data from the U.S. Energy Information Administration (EIA).
 
 ### Internal Combustion Cost Per Mile
 
@@ -182,7 +192,7 @@ The chart above shows that gasoline prices were relatively low through the 1980s
 
 ```  
 
-We can see that efficiency for all ICE vehciles has increased slightly over the most recent 5 years or so.
+We can see that efficiency for all ICE vehicles has increased slightly over the most recent 5 years or so.
 
 ```{r}
   # Dollars per Mile
@@ -333,9 +343,9 @@ Even when we directly compare vehicle classes, electric vehicles are less costly
 
 ## Emissions Comparison
 
-Global warming is caused by increased greenhouse gases that allow heat from the sun to permeate to earth, but prevent that heat from escaping when reflected off the earth's surface. Atmospheric greenhouse gases have increased at alarming rates since the industrial revolution and the scientific community has concluded that we need to drastically cut back on burning fossil fuels; a process which releases carbon dioxide (CO2) a greehouse gas.
+Global warming is caused by increased greenhouse gases that allow heat from the sun to permeate to earth, but prevent that heat from escaping when reflected off the earth's surface. Atmospheric greenhouse gases have increased at alarming rates since the industrial revolution and the scientific community has concluded that we need to drastically cut back on burning fossil fuels; a process which releases carbon dioxide (CO2) a greenhouse gas.
 
-While it may seem obvious that an ICE vehicle emits more CO2 than an electric vehice, it is a bit more complicated. Since the electricity produced to "fuel" electric vehicles does not always come from renewable sources, there are indeed CO2 emissions related to operating an electric vehicle. In this section, we will compare the tailpipe emissions of CO2 per mile of comparable ICE vehicles and CO2 emissions related to producing the energy required to move an electric vehicle a mile.
+While it may seem obvious that an ICE vehicle emits more CO2 than an electric vehicle, it is a bit more complicated. Since the electricity produced to "fuel" electric vehicles does not always come from renewable sources, there are indeed CO2 emissions related to operating an electric vehicle. In this section, we will compare the tailpipe emissions of CO2 per mile of comparable ICE vehicles and CO2 emissions related to producing the energy required to move an electric vehicle a mile.
 
 ### ICE Vehicle Tailpipe Emissions
 
@@ -354,7 +364,7 @@ There are emissions directly related to the operation of ICE vehicles in that wh
     
 ```
 
-We can see in the chart above that comparable ICE vehicles have remained failry steady in their emissions per mile driven over the last thirty years. However, we have seem that in the last five years a slight improvement in tailpipe emissions.
+We can see in the chart above that comparable ICE vehicles have remained fairly steady in their emissions per mile driven over the last thirty years. However, we have seem that in the last five years a slight improvement in tailpipe emissions.
 
 ### EV Tailpipe Emissions
 
