@@ -20,11 +20,11 @@ output: html_document
 
 # Overview and Motivation
 
-"The time is right for electric cars - in fact the time is critial" - Carlos Ghosn
+<em>"The time is right for electric cars - in fact the time is critial."</em> - Carlos Ghosn
 
-Everyday global warming is becoming a more imposing threat. The greenhouse effect caused by the release of carbon dioxide from the process of burning fossil fuels has become perhaps the single greatest challenge humanity has faced. In order to slow and reverse the negative effects of global warming, we need to aggresively persue technologies and products that will eliminate or greatly reduce the amouont of fossil fuel burned and as a result the amount of CO2 in the atmosphere. The transportation sector in the U.S. accounted for roughly 26 percent of the greenhouse gas emissions in 2014, the second largest contributing sector.<sup>1</sup> Electric cars provide a great opportunity to help reduce and eventually eliminate the greenhouse gas contributions of over a quarter of the total U.S. greenhouse gas sources.
+Everyday global warming is becoming a more imposing threat. The greenhouse effect caused by the release of carbon dioxide from the process of burning fossil fuels has become perhaps the single greatest challenge humanity has faced. In order to slow and reverse the negative effects of global warming, we need to aggresively persue technologies and products that will eliminate or greatly reduce the amouont of fossil fuel burned and as a result the amount of CO2 added to the atmosphere. The transportation sector accounted for roughly 26 percent of the greenhouse gas emissions in the U.S. in 2014, the second largest contributing sector.<sup>1</sup> Electric cars provide a great opportunity to help reduce and eventually eliminate the greenhouse gas contributions of over a quarter of the total U.S. greenhouse gas emission sources.
 
-The catch, of course, is that eliminating the need to burn fossil fuels in the transportation sector shift the energy burden to the electricity sector, the largest constributing sector to greenhouse gas emissions in the U.S. comprising 30 percent of all emissions.<sup>1</sup> This fact has served as fodder for some to criticize the greenhouse gas reducing possibilities of electric vehicles. "Electric cars are coal-powered cars. Their carbon emissions can be worse than gasoline powered cars." -Vinod Khosla. To say that electric vehicles are completely emission-free is, in most case, incorrect, or at least doesn't consider the full story. And this quote about the emissions from electric cars being worse than gasoline cars may certainly be true in some cases. In this analysis I will explore this claim and show under what conditions it may prove true. 
+The catch, of course, is that eliminating the need to burn fossil fuels in the transportation sector shifts the energy burden to the electricity sector, the largest constributing sector to greenhouse gas emissions in the U.S. comprising 30 percent of all emissions.<sup>1</sup> This fact has served as fodder for some to criticize the greenhouse gas reducing possibilities of electric vehicles. <em>"Electric cars are coal-powered cars. Their carbon emissions can be worse than gasoline powered cars."</em> -Vinod Khosla. To say that electric vehicles are completely emission-free is, in most case, incorrect, or at least doesn't consider the full story. And this quote about the emissions from electric cars being worse than gasoline cars may certainly be true in some cases. In this analysis I will explore this claim and show under what conditions it may prove true. 
 
 The 2015 Paris Agreement called for an aggressive reduction in global carbon emissions and two of the sectors most responsible for emitting CO2 are the electricity and transportation sectors. It is important to understand that while electric cars can do a great deal with respect to reducing carbon emissions in the transportation sector, the net impact is not as simple. While our electricity system is still reliant on fossil fuels, any emissions impact from the transition to electric vehicles will be mitigated by the fact that additional electricity will need to be generated to charge those batteries.
 
@@ -69,7 +69,11 @@ Electric car sales in the United States and globally have begun to take off as c
       ggtitle("US EV Sales")
 ```
 
-With the EV market's rapid rise, many articles have been popping up to attempt to compare the costs of e
+With the EV market's rapid rise, many articles have been popping up to attempt to compare the costs of electric vehicles and traditional ICE vehicles. One such example from dailyfinance.com explored the full cost of comparable cars and considered the "at the pump" cost for each.<sup>2</sup>
+
+Similarly, many skeptics have been quick to point out that EV's need to get their energy from somewhere and in some cases, the emissions from producing that electricity produces more CO2 than a gasoline car would at the tailpipe. 
+
+The central limitation of these earlier studies and comparisons is that they rely on data and information that is slightly older. As we saw in the chart above, the electric vehicle market has grown in leaps and bounds in the last five years including technological improvements and advancements in battery efficiency.  The electricity sector has changed too with greater reliance on natural gas power facilities and a declining reliance on coal-fired power plants.  All of these factors will affect the cost-effectiveness and environmental benefits of electric vehicles. This analysis will rely on the most up to date information publicly available. 
 
 # Initial Questions
 
@@ -445,3 +449,6 @@ Electric vehicles produce no CO2 at the tailpipe. EVs, in fact, do not even have
 # Sources
 
 <sup>1</sup> U.S. Environmental Protection Agency (EPA). 2014. Inventory of U.S. Greenhouse Gases and Sinks. https://www3.epa.gov/climatechange/ghgemissions/usinventoryreport.html. Accessed on May 2, 2016.
+
+<sup>2</sup> DailyFinance. 2013. Pump vs. Plug: Do You Really Save Money Driving an Electric Car? http://www.dailyfinance.com/2013/06/24/gas-vs-electric-cars-cost-comparison/
+
