@@ -69,13 +69,11 @@ Electric car sales in the United States and globally have begun to take off as c
       ggtitle("US EV Sales")
 ```
 
-With the EV market's rapid rise, many articles have been popping up to attempt to compare the costs of electric vehicles and traditional ICE vehicles. One such example from dailyfinance.com explored the full cost of comparable cars and considered the "at the pump" cost for each.<sup>2</sup>
+With the EV market's rapid rise, many articles have been popping up to attempt to compare the costs of electric vehicles and traditional ICE vehicles. One such example from dailyfinance.com explored the full cost of comparable cars and considered the "at the pump" cost for each.<sup>2</sup> A study from the Idaho National Laboratory also attempts to show estimates of the cost per mile for electric vehicles and ICE vehicles of different efficiencies.<sup>3</sup>
 
-Similarly, many skeptics have been quick to point out that EV's need to get their energy from somewhere and in some cases, the emissions from producing that electricity produces more CO2 than a gasoline car would at the tailpipe. 
+Similarly, many skeptics have been quick to point out that EV's need to get their energy from somewhere and in some cases, the emissions from producing that electricity produces more CO2 than a gasoline car would at the tailpipe. One such article from the New York Times in 2012 explored this theme.<sup>4</sup>
 
 The central limitation of these earlier studies and comparisons is that they rely on data and information that is slightly older. As we saw in the chart above, the electric vehicle market has grown in leaps and bounds in the last five years including technological improvements and advancements in battery efficiency.  The electricity sector has changed too with greater reliance on natural gas power facilities and a declining reliance on coal-fired power plants.  All of these factors will affect the cost-effectiveness and environmental benefits of electric vehicles. This analysis will rely on the most up to date information publicly available. 
-
-# Initial Questions
 
 # Data
 
@@ -88,7 +86,7 @@ In an effort to make this analysis as reproducible as possible, all sources of d
 Throughout the analysis, we rely heavily on the website FuelEconomy.gov, which is the official U.S. government source for fuel economy information. This website is provided under the U.S. Department of Energy.  Specifically we rely on the information provided in the "Vehicle" data set which contains information for 1984-current model year vehicles. This data set contains information central to the analysis such as the efficiency of all vehicles, as measured in miles per gallon (mpg) for internal combustion engine vehicles (ICE) and in killowatthours per 100 miles for electric vehicles. This data set also contains information on the amount of carbon dioxide emitted at the tailpipe for ICE vehicles.
 
 In addition to the U.S. DOE vehicles data set, we rely on the U.S. Energy Information Administration for data on average annual U.S. retail electricity prices and the carbon dioxide intensity of various electricity generating unit fuel types. This information is used to calculate the carbon dioxide equivalent emissions of driving an electric vehicle. 
-Unfortunately, some data that would be quite interesting, useful and relevant for this analysis is not publicly available. For example, data and statistics on car sales by make and model are generally not available publicly and only for purchase. In the spirit of performing a reproducible analysis, it seems appropriate to exclude such data source even though it precludes me from performing certain analyses that I had hoped to perform and mentioned in my project proposal; notably, the regression analysis. I will instead discuss this issue conceptually in the "XXXXXX" section. 
+Unfortunately, some data that would be quite interesting, useful and relevant for this analysis is not publicly available. For example, data and statistics on car sales by make and model are generally not available publicly and only for purchase. In the spirit of performing a reproducible analysis, it seems appropriate to exclude such data source even though it precludes me from performing certain analyses that I had hoped to perform and mentioned in my project proposal; notably, the regression analysis. I will instead discuss this issue conceptually in the "Additional Considerations" section. 
 
 ### Methods
 
@@ -446,9 +444,45 @@ Electric vehicles produce no CO2 at the tailpipe. EVs, in fact, do not even have
 
 # Final Analysis
 
+# Additional Considerations
+
+Since there is no publicly available data on car prices and volumes of sales in the U.S. by make and model, I am unable to perform here the regression analysis I had wanted to perform and stated in my initial project proposal. In lieu of an analysis based on data, I will discuss here in theoretical terms how I would construct such a model and the implications of various assumptions.
+
+### Hypothesis
+
+Car buyers face a lot of choices when they hit the market for cars and the ultimate determining factors change from customer to customer. Among considerations most central to car buyers is the price of owning the vehicle. In addition to the sticker price, shoppers compare car efficiencies in miles per gallon and brands based on perceptions of reliability which would factor into expectations of maintenance costs. 
+
+Over the last decade, many of these key factors affecting car buyers' decisions have been in flux, particularly in the electric car market. As gasoline prices soared, consumers were excited by the prospect of drastically lower cost per mile offered by electric vehicles and could easily rationalize paying a bit more up-front for long term savings. Additionally, the availability of electric car charging stations has greatly increased in a short time period.  
+
+The hypothesis central to the regression analysis is that electric car sales are a function of their price, the price of comparable ICE vehicles, gas prices, availability of charging infrastructure and electricity price.
+
+### Regression Model
+
+The regression model for the hypothesis described above may look something like this: $$  EVs Purchased = \alpha + \beta_{1} (EV Price) + \beta_{2} (ICE Price) + \beta_{3} (gas price) + \beta_{4} (electricity price) + \beta_{5} (charging stations)$$
+
+With this model specification, I might expect $\beta_{1}$ to be negative, $\beta_{2}$ to be positive, $\beta_{3}$ to be positive, $\beta_{4}$ to be negative, and $\beta_{5}$ to be positive. In other words, high sticker prices for EVs and higher electricity prices would lead to a decreased demand for EVs while increase sticker price for ICE vehicles, increased gas prices, and increased charging options would lead to increased demand for EVs. Without the data, it is difficult to estimate the magnitude of each effect, but it might be reasonable to expect that the sticker price of EVs and ICE vehicles $\beta_{1}$ and $\beta_{2}$ would have the largest impact.
+
+Other potential variables that would be interesting to include in the analysis could be the average range of EVs, a dummy variable indicating whether an EV manufacturer has indicated that a longer range version of the car is close - just as Nissan CEO Carlos Ghosn indicated in 2014 which may have lead to lower volume sales in 2015.<sup>5</sup>
+
+### Hypothetical R Coded Model
+
+In the absence of actual data to perform the above regression analysis, I will present sample R code to show my thought processes and demonstrate my ability to code these issues in the R language. For knitting purposes, I will comment-out the code.
+
+```{r Regression Demonstration}
+  
+  
+
+```
+
+
 # Sources
 
-<sup>1</sup> U.S. Environmental Protection Agency (EPA). 2014. Inventory of U.S. Greenhouse Gases and Sinks. https://www3.epa.gov/climatechange/ghgemissions/usinventoryreport.html. Accessed on May 2, 2016.
+<sup>1</sup> U.S. Environmental Protection Agency (EPA). 2014. Inventory of U.S. Greenhouse Gases and Sinks. https://www3.epa.gov/climatechange/ghgemissions/usinventoryreport.html.
 
 <sup>2</sup> DailyFinance. 2013. Pump vs. Plug: Do You Really Save Money Driving an Electric Car? http://www.dailyfinance.com/2013/06/24/gas-vs-electric-cars-cost-comparison/
 
+<sup>3</sup> Idaho National Laboratory. Comparing Energy Costs per Mile for Electric and Gasoline-Fueled Vehicles. https://avt.inl.gov/sites/default/files/pdf/fsev/costs.pdf.
+
+<sup>4</sup> The New York Times. 2012. How Green Are Electric Cars? Depends on Where You Plug In. http://www.nytimes.com/2012/04/15/automobiles/how-green-are-electric-cars-depends-on-where-you-plug-in.html?_r=0
+
+<sup>5</sup> Car and Driver. 2014. Can You BeLeaf It: Nissan Promises 240-Plus-Mile Range for Next Leaf. http://blog.caranddriver.com/can-you-beleaf-it-nissan-promises-240-plus-mile-range-for-next-leaf/
