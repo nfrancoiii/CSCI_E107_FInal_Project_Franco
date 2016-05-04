@@ -9,6 +9,7 @@ output: html_document
 # Load Libraries
   library(dplyr)
   library(tidyr)
+  library(knitr)
   library(ggplot2)
   library(xlsx)
   library(readr)
@@ -96,44 +97,90 @@ In the case of my main data set, the "vehicles" data from the U.S. DOE, the data
 
 The data from the U.S. EIA that provided values for the carbon dioxide intensity of the various electric generating unit fuel types was contained in an html table on the website of the EIA. I used a web scraping technique to pull the table directly into my R work space by finding the xpath of the data table in the html code and using the `rvest` library to read in the table. 
 
-**XXXXX**
-Some of the data from the EIA was available as downloadable Microsoft excel files. The data sources in this form included the average annual historical U.S. retail electricity prices and the average annual historical U.S. gasoline prices. In most cases, these excel files did not not begin in the first column and row. Instead, I needed to specify what row was the "startRow" using the functionality provided in the `xlsx` library. I then used the `dplyr` library to clean the data down to what was most important and remove any `NA` columns that had been read in.
+Some of the data from the EIA was available as downloadable Microsoft excel files. The data sources in this form included the average annual historical U.S. retail electricity prices and the average annual historical U.S. gasoline prices. In most cases, these excel files did not not begin in the first column and row. Instead, I needed to specify what row was the "startRow" using the functionality provided in the `xlsx` library. I then used the `dplyr` library to clean the data down to what was most important and remove any `NA` columns that had been read in. **Note** that the form of these downloads did not allow for direct download into the workspace.
 
 # Exploratory Analysis
 
+As discussed in the data sources section, I begin the analysis by downloading our main data set from the U.S. Department of Energy on fuel economy for all vehicles and reading the set into my workspace.
 
-```{r Exploratory Analysis}
+```{r Exploratory Analysis, warning=FALSE}
 # Open and Unzip Data From U.S. Department of Energy
 temp <- tempfile()
 download.file("http://www.fueleconomy.gov/feg/epadata/vehicles.csv.zip", temp, mode="wb")
 unzip(temp, "vehicles.csv")
 vehicles <- read.table("vehicles.csv", sep=",", header=T)
 
-download.file("http://www.fueleconomy.gov/feg/epadata/emissions.csv.zip", temp, mode="wb")
-unzip(temp, "emissions.csv")
-emissions <- read.table("emissions.csv", sep=",", header=T)
 
-# Merge Vehicle and Emission Data Sets
-merged <- vehicles %>%
-  left_join(emissions, by = "id")
+# **NOTE** Another data set giving grade to vehicles on emissions was also available and initially potentially useful.  As I explored the data further, I decided a more robust analysis would be to measure and compare the environmental impacts of vehicles pased on the amount of carbon dioxide released rather than the grades provided in the `emissions` data set here.
 
-# Download EV Data
-download.file("http://www.afdc.energy.gov/uploads/data/data_source/10567/10567_pev_sales.xlsx", temp, mode="wb")
-test <- read.xlsx("10567_pev_sales.xlsx", sheetIndex=1, startRow = 3)
+# download.file("http://www.fueleconomy.gov/feg/epadata/emissions.csv.zip", temp, mode="wb")
+# unzip(temp, "emissions.csv")
+# emissions <- read.table("emissions.csv", sep=",", header=T)
+# #
+# # Merge Vehicle and Emission Data Sets
+# merged <- vehicles %>%
+#   left_join(emissions, by = "id")
 
+```
+
+Now that I have loaded the `vehicles` data set into my workspace, it is worth exploring a bit to understand the information available and what potential variables I will use throughout the remainder of this analysis. A few examples of the exploratory data I have reviewed include comparing the City and Highway efficiencies of vehicles, comparing total types of cars by vehicle class and total types by fuel type.
+
+```{r Explore Vehicles Data, warning=FALSE}
 # Explore Vehicles
 
+# Car Efficiency Highway vs. City
 vehicles %>%
-  ggplot(aes(year, UCity)) +
-  geom_point() +
-  geom_smooth()
-  
+  ggplot(aes(x=year)) +
+  geom_point(aes(y=UCity, color="City MPG")) +
+  geom_point(aes(y=UHighway, color="Highway MPG"))+
+  xlab("Year") +
+  ylab("Miles Per Gallon") +
+  ggtitle("Highway vs. City Vehicle Efficiencies")
+
+# Vehicle Class
+
+qplot(year, data=vehicles, geom="bar", fill=factor(VClass))
+
+vehicles %>%
+  ggplot(aes(x=year, fill=VClass)) +
+  geom_bar(stat="bin", position="stack") +
+  xlab("Year") +
+  ylab("Frequency") +
+  ggtitle("Vehicle Class Frequency")
+
+# Fuel Type
+vehicles %>%
+  ggplot(aes(x=year, fill=fuelType )) +
+  geom_bar(stat="bin", position="stack") +
+  xlab("Year") +
+  ylab("Frequency") +
+  ggtitle("Vehicle Frequency by Fuel Type")
+
+```
+
+
+Other data that I explored as potentially useful was historical energy prices by state. It would be interesting to perform a similar analysis to the final analysis performed in this project on a state-by-state basis. During the course of this analysis, I was unable to find publically available state-level information for the other pieces that would be necessary to complete this analysis. In any case, I explored the data I gathered from the U.S. EIA on energy prices across the country.
+
+```{r Electricity Price Data, warning=FALSE}  
 # Download Electricity Price Data
-  #state_elec_price_historical <- read_csv("Average_retail_price_of_electricity.csv", skip=5)
-  #names(state_elec_price_historical)[1] <- "State"
-  #state_elec_price_historical <- melt(state_elec_price_historical, id = "State")
+  state_elec_price_historical <- read_csv("Average_retail_price_of_electricity.csv", skip=5)
+  names(state_elec_price_historical)[1] <- "State"
+  state_elec_price_historical <- melt(as.data.frame(state_elec_price_historical))
+  state_elec_price_historical$State <- gsub("US-", "", state_elec_price_historical$State)
+  
+  #Plot Prices
+  state_elec_price_historical %>%
+    ggplot(aes(x=variable, y=value, color=State)) +
+    geom_point() +
+    xlab("Year") +
+    ylab("Electricity Price") +
+    ggtitle("Electricity Price by U.S. State")
+  
+```
 
+The electricity price data I used throughout this analysis is the U.S. average retail price of electricity also provided by the U.S. EIA. For the comparative analysis I have also used the historical national average for gasoline prices. As discussed above in the data and methodologies sections, these files had to be downloaded outside of the model. 
 
+```{r}
 us_elec_price_historical <- read_csv("Average_retail_price_of_electricity_annual.csv", skip=4)
 names(us_elec_price_historical)[2] <- "centsPerKWh"
 
@@ -144,18 +191,12 @@ us_gas_price_historical <- us_gas_price_historical %>%
   filter(Retail.Gasoline.Price...Current.dollars.gallon. > 0)
   names(us_gas_price_historical) <- c("Year", "Price")
   
-
 ```
 
-### Emissions Per Mile
-```{r Emissions Per Mile}
 
-vehicles %>%
-  ggplot(aes(year, co2A)) +
-  geom_point() +
-  geom_smooth()
+# Final Analysis
 
-```
+After loading in the various data sets and exploring the data, I turned to answering 
 
 ## Cost Per Mile Driven
 
@@ -441,9 +482,6 @@ Electric vehicles produce no CO2 at the tailpipe. EVs, in fact, do not even have
   
 ```
 
-
-# Final Analysis
-
 # Additional Considerations
 
 Since there is no publicly available data on car prices and volumes of sales in the U.S. by make and model, I am unable to perform here the regression analysis I had wanted to perform and stated in my initial project proposal. In lieu of an analysis based on data, I will discuss here in theoretical terms how I would construct such a model and the implications of various assumptions.
@@ -470,8 +508,18 @@ In the absence of actual data to perform the above regression analysis, I will p
 
 ```{r Regression Demonstration}
   
+#   # Load the broom library
+#   library(broom)
+#   
+#   # Speficify the regression model
+#   model <- lm(EVSales ~ EVPrice + ICEPrice + GasPrice + ElecPrice + ChargingStations, dataSet)
+# 
+#   # Turns output from the regression model into a useable dataframe
+#   tidy(model)
+#   
+#   # Report the results with confidence intervals for the coefficient values
+#   tidy(model, conf.int = TRUE)
   
-
 ```
 
 
