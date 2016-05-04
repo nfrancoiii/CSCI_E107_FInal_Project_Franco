@@ -45,7 +45,7 @@ The second concept I will explore is the CO2 emissions per mile of both types of
 
 Electric car sales in the United States and globally have begun to take off as companies like Tesla have made great strides in removing the two largest barriers to EV ownership: range and infrastructure. Electric cars are now approaching 300 miles of range on a single charge and the industry expects advancements over the next decade may make electric vehicles more appealing that gasoline cars.  Additionally, private companies have taken on expanding the network of electric charging stations. As such, we have seen the number of EV sales ramp up with no signs of slowing as can be seen in the bar chart below.
 
-```{r U.S. Electric Car Sales}
+```{r U.S. Electric Car Sales, warning=FALSE}
 
   # U.S. Electric Car Sales
     temp <- tempfile()
@@ -68,6 +68,7 @@ Electric car sales in the United States and globally have begun to take off as c
       ggplot(aes(x=Year, y=Sales, fill=Model)) +
       geom_bar(stat="identity") +
       ggtitle("US EV Sales")
+    ggsave("US_EV_Sales.png")
 ```
 
 With the EV market's rapid rise, many articles have been popping up to attempt to compare the costs of electric vehicles and traditional ICE vehicles. One such example from dailyfinance.com explored the full cost of comparable cars and considered the "at the pump" cost for each.<sup>2</sup> A study from the Idaho National Laboratory also attempts to show estimates of the cost per mile for electric vehicles and ICE vehicles of different efficiencies.<sup>3</sup>
