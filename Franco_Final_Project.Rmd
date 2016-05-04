@@ -1,5 +1,5 @@
 ---
-title: "Measuringthe Cost Savings and Environmental Benefits of Operating an Electric Vehicle"
+title: "Measuring the Cost Savings and Environmental Benefits of Operating an Electric Vehicle"
 author: "Nicholas Franco III"
 date: "May 4, 2016"
 output: html_document
@@ -21,11 +21,11 @@ output: html_document
 
 # Overview and Motivation
 
-<em>"The time is right for electric cars - in fact the time is critial."</em> - Carlos Ghosn
+<em>"The time is right for electric cars - in fact the time is critical."</em> - Carlos Ghosn
 
-Everyday global warming is becoming a more imposing threat. The greenhouse effect caused by the release of carbon dioxide from the process of burning fossil fuels has become perhaps the single greatest challenge humanity has faced. In order to slow and reverse the negative effects of global warming, we need to aggresively persue technologies and products that will eliminate or greatly reduce the amouont of fossil fuel burned and as a result the amount of CO2 added to the atmosphere. The transportation sector accounted for roughly 26 percent of the greenhouse gas emissions in the U.S. in 2014, the second largest contributing sector.<sup>1</sup> Electric cars provide a great opportunity to help reduce and eventually eliminate the greenhouse gas contributions of over a quarter of the total U.S. greenhouse gas emission sources.
+Everyday global warming is becoming a more imposing threat. The greenhouse effect caused by the release of carbon dioxide from the process of burning fossil fuels has become perhaps the single greatest challenge humanity has faced. In order to slow and reverse the negative effects of global warming, we need to aggressively pursue technologies and products that will eliminate or greatly reduce the amount of fossil fuel burned and as a result the amount of CO2 added to the atmosphere. The transportation sector accounted for roughly 26 percent of the greenhouse gas emissions in the U.S. in 2014, the second largest contributing sector.<sup>1</sup> Electric cars provide a great opportunity to help reduce and eventually eliminate the greenhouse gas contributions of over a quarter of the total U.S. greenhouse gas emission sources.
 
-The catch, of course, is that eliminating the need to burn fossil fuels in the transportation sector shifts the energy burden to the electricity sector, the largest constributing sector to greenhouse gas emissions in the U.S. comprising 30 percent of all emissions.<sup>1</sup> This fact has served as fodder for some to criticize the greenhouse gas reducing possibilities of electric vehicles. <em>"Electric cars are coal-powered cars. Their carbon emissions can be worse than gasoline powered cars."</em> -Vinod Khosla. To say that electric vehicles are completely emission-free is, in most case, incorrect, or at least doesn't consider the full story. And this quote about the emissions from electric cars being worse than gasoline cars may certainly be true in some cases. In this analysis I will explore this claim and show under what conditions it may prove true. 
+The catch, of course, is that eliminating the need to burn fossil fuels in the transportation sector shifts the energy burden to the electricity sector, the largest contributing sector to greenhouse gas emissions in the U.S. comprising 30 percent of all emissions.<sup>1</sup> This fact has served as fodder for some to criticize the greenhouse gas reducing possibilities of electric vehicles. <em>"Electric cars are coal-powered cars. Their carbon emissions can be worse than gasoline powered cars."</em> -Vinod Khosla. To say that electric vehicles are completely emission-free is, in most case, incorrect, or at least doesn't consider the full story. And this quote about the emissions from electric cars being worse than gasoline cars may certainly be true in some cases. In this analysis I will explore this claim and show under what conditions it may prove true. 
 
 The 2015 Paris Agreement called for an aggressive reduction in global carbon emissions and two of the sectors most responsible for emitting CO2 are the electricity and transportation sectors. It is important to understand that while electric cars can do a great deal with respect to reducing carbon emissions in the transportation sector, the net impact is not as simple. While our electricity system is still reliant on fossil fuels, any emissions impact from the transition to electric vehicles will be mitigated by the fact that additional electricity will need to be generated to charge those batteries.
 
@@ -97,11 +97,11 @@ In the case of my main data set, the "vehicles" data from the U.S. DOE, the data
 
 The data from the U.S. EIA that provided values for the carbon dioxide intensity of the various electric generating unit fuel types was contained in an html table on the website of the EIA. I used a web scraping technique to pull the table directly into my R work space by finding the xpath of the data table in the html code and using the `rvest` library to read in the table. 
 
-Some of the data from the EIA was available as downloadable Microsoft excel files. The data sources in this form included the average annual historical U.S. retail electricity prices and the average annual historical U.S. gasoline prices. In most cases, these excel files did not not begin in the first column and row. Instead, I needed to specify what row was the "startRow" using the functionality provided in the `xlsx` library. I then used the `dplyr` library to clean the data down to what was most important and remove any `NA` columns that had been read in. **Note** that the form of these downloads did not allow for direct download into the workspace.
+Some of the data from the EIA was available as downloadable Microsoft excel files. The data sources in this form included the average annual historical U.S. retail electricity prices and the average annual historical U.S. gasoline prices. In most cases, these excel files did not not begin in the first column and row. Instead, I needed to specify what row was the "startRow" using the functionality provided in the `xlsx` library. I then used the `dplyr` library to clean the data down to what was most important and remove any `NA` columns that had been read in. **Note** that the form of these downloads did not allow for direct download into the work space.
 
 # Exploratory Analysis
 
-As discussed in the data sources section, I begin the analysis by downloading our main data set from the U.S. Department of Energy on fuel economy for all vehicles and reading the set into my workspace.
+As discussed in the data sources section, I begin the analysis by downloading our main data set from the U.S. Department of Energy on fuel economy for all vehicles and reading the set into my work space.
 
 ```{r Exploratory Analysis, warning=FALSE}
 # Open and Unzip Data From U.S. Department of Energy
@@ -123,7 +123,7 @@ vehicles <- read.table("vehicles.csv", sep=",", header=T)
 
 ```
 
-Now that I have loaded the `vehicles` data set into my workspace, it is worth exploring a bit to understand the information available and what potential variables I will use throughout the remainder of this analysis. A few examples of the exploratory data I have reviewed include comparing the City and Highway efficiencies of vehicles, comparing total types of cars by vehicle class and total types by fuel type.
+Now that I have loaded the `vehicles` data set into my work space, it is worth exploring a bit to understand the information available and what potential variables I will use throughout the remainder of this analysis. A few examples of the exploratory data I have reviewed include comparing the City and Highway efficiencies of vehicles, comparing total types of cars by vehicle class and total types by fuel type.
 
 ```{r Explore Vehicles Data, warning=FALSE}
 # Explore Vehicles
@@ -159,7 +159,7 @@ vehicles %>%
 ```
 
 
-Other data that I explored as potentially useful was historical energy prices by state. It would be interesting to perform a similar analysis to the final analysis performed in this project on a state-by-state basis. During the course of this analysis, I was unable to find publically available state-level information for the other pieces that would be necessary to complete this analysis. In any case, I explored the data I gathered from the U.S. EIA on energy prices across the country.
+Other data that I explored as potentially useful was historical energy prices by state. It would be interesting to perform a similar analysis to the final analysis performed in this project on a state-by-state basis. During the course of this analysis, I was unable to find publicly available state-level information for the other pieces that would be necessary to complete this analysis. In any case, I explored the data I gathered from the U.S. EIA on energy prices across the country.
 
 ```{r Electricity Price Data, warning=FALSE}  
 # Download Electricity Price Data
@@ -246,7 +246,7 @@ Now let's turn to the efficiency of all ICE vehicles as measured in miles per ga
 
 ```  
 
-We can see that efficiency for all ICE vehicles has increased slightly over the most recent 5 years or so after remaining relatively steady for most of the pervious 20 years.
+We can see that efficiency for all ICE vehicles has increased slightly over the most recent 5 years or so after remaining relatively steady for most of the previous 20 years.
 
 ```{r Dollars per Mile ICE, warning=FALSE}
   # Dollars per Mile
@@ -299,7 +299,7 @@ First, lets look at how average retail electricity prices in the U.S. have chang
 
 The chart above shows a generally constant increase in electricity prices over the period increasing from less than eight cents per kWh to more than 10 cents per kWh.
 
-Now let's turn to the data available in the `vehicles` data set. The data set has information on the efficiency of electric vehivles measured as kWh/100 miles, which can be converted into the second variable in our equation; $\frac{kWh}{mile}$. 
+Now let's turn to the data available in the `vehicles` data set. The data set has information on the efficiency of electric vehicles measured as kWh/100 miles, which can be converted into the second variable in our equation; $\frac{kWh}{mile}$. 
 
 ```{r, warning=FALSE}
 
@@ -316,7 +316,7 @@ Now let's turn to the data available in the `vehicles` data set. The data set ha
     ggtitle("Electric Vehicle Killowatthours per 100 Miles")
 ```
 
-We can see in the graph above that overtime, the effciency of electric vehicles has improved considerably.
+We can see in the graph above that overtime, the efficiency of electric vehicles has improved considerably.
 
 Now I use these estimates to calculate the cost per mile for electric vehicles.
 
@@ -499,9 +499,9 @@ Now that we have the data set of EVs combined with various levels of CO2 intensi
     ggtitle("CO2 per Mile for EVs by Electricity Source")
 ```
 
-First we notice the same general decline over time that reflects the improved efficiency in EVs over time. The next thing we notice are three distinct groupings of fuel types: coal, oil, and natural gas. We see that the three coal types are grouped together as the most CO2 intensive fuel feedstock for electricity generating units. The coal units are followed by the two types of oil units and lastly by natural gas, which sits much lower than the other fuel types. 
+First we notice the same general decline over time that reflects the improved efficiency in EVs over time. The next thing we notice are three distinct groupings of fuel types: coal, oil, and natural gas. We see that the three coal types are grouped together as the most CO2 intensive fuel feed-stock for electricity generating units. The coal units are followed by the two types of oil units and lastly by natural gas, which sits much lower than the other fuel types. 
 
-Let's now compare these CO2 intensity trends to the CO2 emissions per mile from ICE vehicles. For simplicity, I have chosen to only present the most carbon intenstive electricity source for each of the three groupings described above.
+Let's now compare these CO2 intensity trends to the CO2 emissions per mile from ICE vehicles. For simplicity, I have chosen to only present the most carbon intensive electricity source for each of the three groupings described above.
 
 ## Compare CO2 Per Mile of ICE and EVs
 
