@@ -102,60 +102,15 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
 
 <p>Let's first look at historical gas prices in the U.S. since 1980.</p>
 
-<div class="highlight highlight-source-r"><pre>
-<span class="pl-c">## Internal Combustion Engines</span>
-
-  <span class="pl-c"># Dollars Per Gallon ($/gal)</span>
-  <span class="pl-smi">dol_gal</span> <span class="pl-k">&lt;-</span> as.data.frame(<span class="pl-smi">us_gas_price_historical</span>)
-  <span class="pl-smi">dol_gal</span><span class="pl-k">$</span><span class="pl-smi">Year</span> <span class="pl-k">&lt;-</span> as.numeric(levels(<span class="pl-smi">dol_gal</span><span class="pl-k">$</span><span class="pl-smi">Year</span>)[<span class="pl-smi">dol_gal</span><span class="pl-k">$</span><span class="pl-smi">Year</span>])
-
-  <span class="pl-smi">dol_gal</span> %<span class="pl-k">&gt;</span>%
-    filter(<span class="pl-smi">Year</span> <span class="pl-k">&gt;</span><span class="pl-k">=</span> <span class="pl-c1">1980</span>) %<span class="pl-k">&gt;</span>%
-    ggplot(aes(<span class="pl-smi">Year</span>, <span class="pl-smi">Price</span>)) <span class="pl-k">+</span>
-    geom_line(<span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>brown<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ylab(<span class="pl-s"><span class="pl-pds">"</span>Dollars per Gallon<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ggtitle(<span class="pl-s"><span class="pl-pds">"</span>U.S. Average Historical Price per Gallon of Gasoline<span class="pl-pds">"</span></span>)
-  ggsave(<span class="pl-s"><span class="pl-pds">"</span>price_of_gas.png<span class="pl-pds">"</span></span>)
-</pre></div>
-
 <p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/price_of_gas.png" alt="Price of Gas"></p>
 
 <p>The chart above shows that gasoline prices were relatively low through the 1980s and 90s and began to climb in the early 2000s until peaking in 2012. Since 2012 prices have been on a decline.</p>
 
 <p>Now let's turn to the efficiency of all ICE vehicles as measured in miles per gallon (mpg) as the data is available in our <code>vehicles</code> data set, excluding electric cars.</p>
 
-<div class="highlight highlight-source-r"><pre>  <span class="pl-c"># Miles Per Gallon (MPG)</span>
-    <span class="pl-smi">mpg</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">vehicles</span> %<span class="pl-k">&gt;</span>%
-    filter(<span class="pl-smi">combE</span> <span class="pl-k">==</span> <span class="pl-c1">0</span>)
-
-  <span class="pl-smi">mpg</span> %<span class="pl-k">&gt;</span>%
-    ggplot(aes(<span class="pl-smi">year</span>, <span class="pl-smi">comb08</span>)) <span class="pl-k">+</span>
-    geom_point() <span class="pl-k">+</span>
-    geom_smooth(<span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>brown<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    xlab(<span class="pl-s"><span class="pl-pds">"</span>Year<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ylab(<span class="pl-s"><span class="pl-pds">"</span>Miles per Gallon<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ggtitle(<span class="pl-s"><span class="pl-pds">"</span>Miles per Gallon of All Models<span class="pl-pds">"</span></span>)
-  ggsave(<span class="pl-s"><span class="pl-pds">"</span>mpg_all_models.png<span class="pl-pds">"</span></span>)
-</pre></div>
-
 <p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/mpg_all_models.png" alt="MPG for ICE Vehicles"></p>
 
 <p>We can see that efficiency for all ICE vehicles has increased slightly over the most recent 5 years or so after remaining relatively steady for most of the previous 20 years.</p>
-
-<div class="highlight highlight-source-r"><pre>  <span class="pl-c"># Dollars per Mile</span>
-  <span class="pl-smi">ice_merged</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">mpg</span> %<span class="pl-k">&gt;</span>%
-    left_join(<span class="pl-smi">dol_gal</span>, <span class="pl-v">by</span><span class="pl-k">=</span>c(<span class="pl-s"><span class="pl-pds">"</span>year<span class="pl-pds">"</span></span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Year<span class="pl-pds">"</span></span>)) %<span class="pl-k">&gt;</span>%
-    mutate(<span class="pl-v">CentsPerMile</span> <span class="pl-k">=</span> <span class="pl-smi">Price</span><span class="pl-k">*</span><span class="pl-c1">100</span><span class="pl-k">/</span><span class="pl-smi">comb08</span>)
-
-  <span class="pl-smi">ice_merged</span> %<span class="pl-k">&gt;</span>%
-    ggplot(aes(<span class="pl-smi">year</span>, <span class="pl-smi">CentsPerMile</span>)) <span class="pl-k">+</span>
-    geom_point() <span class="pl-k">+</span>
-    geom_smooth(<span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>brown<span class="pl-pds">"</span></span>) <span class="pl-k">+</span> 
-    xlab(<span class="pl-s"><span class="pl-pds">"</span>Year<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ylab(<span class="pl-s"><span class="pl-pds">"</span>Cents per Mile<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ggtitle(<span class="pl-s"><span class="pl-pds">"</span>Internal Combustion Engine Cost per Mile (Cents per Mile)<span class="pl-pds">"</span></span>)
-  ggsave(<span class="pl-s"><span class="pl-pds">"</span>ice_cents_per_mile_all.png<span class="pl-pds">"</span></span>)
-</pre></div>
 
 <p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/ice_cents_per_mile_all.png" alt="Cost per Mile ICE"></p>
 
@@ -168,71 +123,17 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
 
 <p>First, lets look at how average retail electricity prices in the U.S. have changed over the last decade. </p>
 
-<div class="highlight highlight-source-r"><pre><span class="pl-c">## Electric Vehicles</span>
-
-  <span class="pl-c"># Dollars Per Killowatthour ($/kwh)</span>
-  <span class="pl-smi">dol_kwh</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">us_elec_price_historical</span>
-
-  <span class="pl-c"># Augment Data for 2016</span>
-  <span class="pl-smi">price_2016</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">us_elec_price_historical</span> %<span class="pl-k">&gt;</span>%
-  filter(<span class="pl-smi">Year</span> <span class="pl-k">&gt;</span><span class="pl-k">=</span> <span class="pl-c1">2014</span>) %<span class="pl-k">&gt;</span>%
-  summarise(<span class="pl-v">centsPerKWh</span> <span class="pl-k">=</span>mean(<span class="pl-smi">centsPerKWh</span>))
-
-  <span class="pl-smi">dat_2016</span> <span class="pl-k">&lt;-</span> as.data.frame(c(<span class="pl-c1">2016</span>, <span class="pl-smi">price_2016</span>))
-    names(<span class="pl-smi">dat_2016</span>) <span class="pl-k">&lt;-</span> names(<span class="pl-smi">dol_kwh</span>)
-
-  <span class="pl-smi">dol_kwh</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">us_elec_price_historical</span> %<span class="pl-k">&gt;</span>%
-  rbind(<span class="pl-smi">dat_2016</span>)
-
-  <span class="pl-smi">dol_kwh</span> %<span class="pl-k">&gt;</span>%
-    ggplot(aes(<span class="pl-smi">Year</span>, <span class="pl-smi">centsPerKWh</span>)) <span class="pl-k">+</span>
-    geom_line(<span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>blue<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ylab(<span class="pl-s"><span class="pl-pds">"</span>Cents per kWh<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ggtitle(<span class="pl-s"><span class="pl-pds">"</span>Average Annual U.S. Electricity Prices<span class="pl-pds">"</span></span>)
-  ggsave(<span class="pl-s"><span class="pl-pds">"</span>elec_prices.png<span class="pl-pds">"</span></span>)
-</pre></div>
-
 <p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/elec_prices.png" alt="Electricity Price"></p>
 
 <p>The chart above shows a generally constant increase in electricity prices over the period increasing from less than eight cents per kWh to more than 10 cents per kWh.</p>
 
 <p>Now let's turn to the data available in the <code>vehicles</code> data set. The data set has information on the efficiency of electric vehicles measured as kWh/100 miles, which can be converted into the second variable in our equation; $\frac{kWh}{mile}$. </p>
 
-<div class="highlight highlight-source-r"><pre>
-  <span class="pl-c">#  Killowatthour/100 miles (kwh/100m)</span>
-  <span class="pl-smi">kwh_100m</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">vehicles</span> %<span class="pl-k">&gt;</span>%
-    filter(<span class="pl-smi">combE</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>)
-
-  <span class="pl-smi">kwh_100m</span> %<span class="pl-k">&gt;</span>%
-    ggplot(aes(<span class="pl-smi">year</span>, <span class="pl-smi">combE</span>)) <span class="pl-k">+</span>
-    geom_point() <span class="pl-k">+</span>
-    geom_smooth() <span class="pl-k">+</span>
-    xlab(<span class="pl-s"><span class="pl-pds">"</span>Year<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ylab(<span class="pl-s"><span class="pl-pds">"</span>kWh per 100 Miles<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ggtitle(<span class="pl-s"><span class="pl-pds">"</span>Electric Vehicle Killowatthours per 100 Miles<span class="pl-pds">"</span></span>)
-  ggsave(<span class="pl-s"><span class="pl-pds">"</span>kwh_mile.png<span class="pl-pds">"</span></span>)
-</pre></div>
-
 <p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/kwh_mile.png" alt="KWh per Mile"></p>
 
 <p>We can see in the graph above that overtime, the efficiency of electric vehicles has improved considerably.</p>
 
 <p>Now I use these estimates to calculate the cost per mile for electric vehicles.</p>
-
-<div class="highlight highlight-source-r"><pre>  <span class="pl-c"># Dollars per mile</span>
-  <span class="pl-smi">elec_merged</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">kwh_100m</span> %<span class="pl-k">&gt;</span>%
-    left_join(<span class="pl-smi">dol_kwh</span>, <span class="pl-v">by</span><span class="pl-k">=</span>c(<span class="pl-s"><span class="pl-pds">"</span>year<span class="pl-pds">"</span></span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Year<span class="pl-pds">"</span></span>)) %<span class="pl-k">&gt;</span>%
-    mutate(<span class="pl-v">centsPerMile</span> <span class="pl-k">=</span> (<span class="pl-smi">combE</span><span class="pl-k">/</span><span class="pl-c1">100</span>)<span class="pl-k">*</span><span class="pl-smi">centsPerKWh</span>)
-
-  <span class="pl-smi">elec_merged</span> %<span class="pl-k">&gt;</span>%
-    ggplot(aes(<span class="pl-smi">year</span>, <span class="pl-smi">centsPerMile</span>)) <span class="pl-k">+</span>
-    geom_point() <span class="pl-k">+</span>
-    geom_smooth() <span class="pl-k">+</span> 
-    xlab(<span class="pl-s"><span class="pl-pds">"</span>Year<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ylab(<span class="pl-s"><span class="pl-pds">"</span>Cents Per Mile<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ggtitle(<span class="pl-s"><span class="pl-pds">"</span>Cost per Mile for Electric Vehicles<span class="pl-pds">"</span></span>)
-  ggsave(<span class="pl-s"><span class="pl-pds">"</span>cents_per_mile_ev.png<span class="pl-pds">"</span></span>)
-</pre></div>
 
 <p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/cents_per_mile_ev.png" alt="Cost per Mile EV"></p>
 
@@ -243,82 +144,19 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
 
 <p>Now I bring the estimates of cost per mile for electric vehicles and ICE vehicles together to compare the cost per mile against each other.</p>
 
-<div class="highlight highlight-source-r"><pre>
-  ggplot() <span class="pl-k">+</span>
-    geom_smooth(aes(<span class="pl-smi">elec_merged</span><span class="pl-k">$</span><span class="pl-smi">year</span>, <span class="pl-smi">elec_merged</span><span class="pl-k">$</span><span class="pl-smi">centsPerMile</span>, <span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Electric<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    geom_smooth(aes(<span class="pl-smi">ice_merged</span><span class="pl-k">$</span><span class="pl-smi">year</span>,<span class="pl-smi">ice_merged</span><span class="pl-k">$</span><span class="pl-smi">CentsPerMile</span>, <span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>ICE<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    scale_color_manual(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>,
-                       <span class="pl-v">breaks</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>Electric<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>ICE<span class="pl-pds">"</span></span>),
-                       <span class="pl-v">values</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>blue<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>brown<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    xlab(<span class="pl-s"><span class="pl-pds">"</span>Year<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ylab(<span class="pl-s"><span class="pl-pds">"</span>Cents per Mile<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ggtitle(<span class="pl-s"><span class="pl-pds">"</span>Comparison of Electric and ICE Cars by Cost per Mile<span class="pl-pds">"</span></span>)
-  ggsave(<span class="pl-s"><span class="pl-pds">"</span>ev_ice_cost_per_mile_all.png<span class="pl-pds">"</span></span>)
-</pre></div>
-
 <p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/ev_ice_cost_per_mile_all.png" alt="Cost per Mile Compare EV vs. ICE"></p>
 
 <p>As we can see, on a purely cost per mile basis, the electric vehicles win out, particularly in the most recent years. However, the trend we notices is that the relative value of an electric vehicle on a per mile basis is largely dependent on gas prices. Should gas prices return to their 1990s era levels, the relative benefit of EVs per mile is much less consequential.</p>
 
 <p>Now, the fleet of electric car options available is not as wide as those for ICE vehicles. We will limit out data set in two ways; one where we include only the vehicle classes where there is an EV option and another where we include only the vehicle classes for which there are more than 10 EV options.</p>
 
-<div class="highlight highlight-source-r"><pre>
-  <span class="pl-c"># Create Unique List of VClasses for EVs</span>
-  <span class="pl-smi">elec_type</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">elec_merged</span> %<span class="pl-k">&gt;</span>%
-    select(<span class="pl-smi">VClass</span>) %<span class="pl-k">&gt;</span>%
-    group_by(<span class="pl-smi">VClass</span>) %<span class="pl-k">&gt;</span>%
-    summarize(<span class="pl-v">Count</span> <span class="pl-k">=</span> n())
-  <span class="pl-smi">elec_type</span>
-  <span class="pl-smi">trim_elec_type</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">elec_type</span> %<span class="pl-k">&gt;</span>%
-    filter(<span class="pl-smi">Count</span> <span class="pl-k">&gt;</span> <span class="pl-c1">10</span>)
-  <span class="pl-smi">trim_elec_type</span>
-
-  <span class="pl-smi">elec_merged_trim</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">elec_merged</span> %<span class="pl-k">&gt;</span>%
-    filter(<span class="pl-smi">VClass</span> <span class="pl-k">%in%</span> <span class="pl-smi">trim_elec_type</span><span class="pl-k">$</span><span class="pl-smi">VClass</span>)
-
-  <span class="pl-c"># Trim the ICE data to only include comparable cars</span>
-  <span class="pl-smi">ice_comparable</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">ice_merged</span> %<span class="pl-k">&gt;</span>%
-    filter(<span class="pl-smi">VClass</span> <span class="pl-k">%in%</span> <span class="pl-smi">elec_type</span><span class="pl-k">$</span><span class="pl-smi">VClass</span>)
-
-  <span class="pl-smi">ice_comparable_trim</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">ice_merged</span> %<span class="pl-k">&gt;</span>%
-    filter(<span class="pl-smi">VClass</span> <span class="pl-k">%in%</span> <span class="pl-smi">trim_elec_type</span><span class="pl-k">$</span><span class="pl-smi">VClass</span>)
-</pre></div>
-
 <p>Let's look at how the more comparable sets of ICE vehicle classes stack up with respect to cost per mile.  </p>
-
-<div class="highlight highlight-source-r"><pre>  <span class="pl-c"># Cost per Mile for Groups of ICE Vehicles</span>
-  ggplot() <span class="pl-k">+</span>
-    geom_smooth(aes(<span class="pl-smi">ice_merged</span><span class="pl-k">$</span><span class="pl-smi">year</span>, <span class="pl-smi">ice_merged</span><span class="pl-k">$</span><span class="pl-smi">CentsPerMile</span>, <span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>All Classes<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    geom_smooth(aes(<span class="pl-smi">ice_comparable</span><span class="pl-k">$</span><span class="pl-smi">year</span>, <span class="pl-smi">ice_comparable</span><span class="pl-k">$</span><span class="pl-smi">CentsPerMile</span>, <span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Classes with EV Option<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    geom_smooth(aes(<span class="pl-smi">ice_comparable_trim</span><span class="pl-k">$</span><span class="pl-smi">year</span>, <span class="pl-smi">ice_comparable_trim</span><span class="pl-k">$</span><span class="pl-smi">CentsPerMile</span>, <span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Classes with &gt; 10 EV Options<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-  scale_color_manual(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>,
-                     <span class="pl-v">breaks</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>All Classes<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Classes with EV Option<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Classes with &gt; 10 EV Options<span class="pl-pds">"</span></span>),
-                     <span class="pl-v">values</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>brown<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>black<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>darkgreen<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    ylab(<span class="pl-s"><span class="pl-pds">"</span>Cents per Mile<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    xlab(<span class="pl-s"><span class="pl-pds">"</span>Year<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ggtitle(<span class="pl-s"><span class="pl-pds">"</span>Cost per Mile for Groups of ICE Vehicles<span class="pl-pds">"</span></span>)
-  ggsave(<span class="pl-s"><span class="pl-pds">"</span>cost_per_mile_ice_by_group.png<span class="pl-pds">"</span></span>)
-</pre></div>
 
 <p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/cost_per_mile_ice_by_group.png" alt="Cost per Mile ICE by Vehicle Class"></p>
 
 <p>As we can see, there is some savings from comparing only the ICE vehicle classes that have an EV equivalent.  This is generally due to the types of trucks and heavy duty vehicles that tend to be less fuel efficient and at this point do not have EV counterparts.</p>
 
 <p>Let's now compare the narrowest group of vehicle classes to present the most conservative comparison between ICE vehicles and EVs.</p>
-
-<div class="highlight highlight-source-r"><pre>
-  <span class="pl-c"># Comparison of Electric and ICE Cars by Cost per Mile (Assuming Same Vehicle Class)</span>
-  ggplot() <span class="pl-k">+</span>
-    geom_smooth(aes(<span class="pl-smi">elec_merged_trim</span><span class="pl-k">$</span><span class="pl-smi">year</span>, <span class="pl-smi">elec_merged_trim</span><span class="pl-k">$</span><span class="pl-smi">centsPerMile</span>, <span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Electric<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    geom_smooth(aes(<span class="pl-smi">ice_comparable_trim</span><span class="pl-k">$</span><span class="pl-smi">year</span>,<span class="pl-smi">ice_comparable_trim</span><span class="pl-k">$</span><span class="pl-smi">CentsPerMile</span>, <span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>ICE<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    scale_color_manual(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>,
-                       <span class="pl-v">breaks</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>Electric<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>ICE<span class="pl-pds">"</span></span>),
-                       <span class="pl-v">values</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>blue<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>black<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    xlab(<span class="pl-s"><span class="pl-pds">"</span>Year<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ylab(<span class="pl-s"><span class="pl-pds">"</span>Cents per Mile<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ggtitle(<span class="pl-s"><span class="pl-pds">"</span>Comparison of Electric and ICE Cars by Cost per Mile Comparing Same Vehicle Classes<span class="pl-pds">"</span></span>)
- ggsave(<span class="pl-s"><span class="pl-pds">"</span>evs_ice_cost_per_mile_trimmed.png<span class="pl-pds">"</span></span>)
-</pre></div>
 
 <p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/evs_ice_cost_per_mile_trimmed.png" alt="Cost per Mile Compare EV ICE trimmed"></p>
 
@@ -336,18 +174,6 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
 
 <p>There are emissions directly related to the operation of ICE vehicles in that when gasoline is burned to fuel the engine, CO2 is released from the tailpipe. Our data set from the U.S. Department of Energy provides information on tailpipe emissions in grams of CO2 per mile.</p>
 
-<div class="highlight highlight-source-r"><pre>
-  <span class="pl-c"># ICE CO2 per mile</span>
-  <span class="pl-smi">ice_comparable_trim</span> %<span class="pl-k">&gt;</span>%
-    ggplot(aes(<span class="pl-smi">year</span>, <span class="pl-smi">co2TailpipeGpm</span>)) <span class="pl-k">+</span>
-    geom_point() <span class="pl-k">+</span>
-    geom_smooth(<span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>brown<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    xlab(<span class="pl-s"><span class="pl-pds">"</span>Year<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ylab(<span class="pl-s"><span class="pl-pds">"</span>Grams per Mile<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ggtitle(<span class="pl-s"><span class="pl-pds">"</span>CO2 per Mile for Comparable Class ICE Vehicles<span class="pl-pds">"</span></span>)
-  ggsave(<span class="pl-s"><span class="pl-pds">"</span>co2_per_mile_ice.png<span class="pl-pds">"</span></span>)
-</pre></div>
-
 <p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/co2_per_mile_ice.png" alt="CO2 per Mile ICE"></p>
 
 <p>We can see in the chart above that comparable ICE vehicles have remained fairly steady in their emissions per mile driven over the last thirty years. However, we have seem that in the last five years a slight improvement in tailpipe emissions.</p>
@@ -357,51 +183,7 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
 
 <p>Electric vehicles produce no CO2 at the tailpipe. EVs, in fact, do not even have tailpipes. However, CO2 is generally burned in order to create the electricity used to charge the battery in an EV. Here we must scrape the data for CO2 per kWh directly from an html table on the EIA's website.</p>
 
-<div class="highlight highlight-source-r"><pre>
-  <span class="pl-c"># Scrap EIA Table for CO2 per kWh</span>
-
-  <span class="pl-smi">url</span> <span class="pl-k">&lt;-</span> <span class="pl-s"><span class="pl-pds">"</span>https://www.eia.gov/tools/faqs/faq.cfm?id=74&amp;t=11<span class="pl-pds">"</span></span>
-  <span class="pl-smi">co2_kwh</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">url</span> %<span class="pl-k">&gt;</span>% read_html() %<span class="pl-k">&gt;</span>% html_node(<span class="pl-v">xpath</span> <span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">'</span>//*[@id="innerX"]/div/div[3]/div[1]/table<span class="pl-pds">'</span></span>) %<span class="pl-k">&gt;</span>% html_table()
-  <span class="pl-smi">co2_kwh</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">co2_kwh</span> %<span class="pl-k">&gt;</span>%
-    filter(<span class="pl-smi">Fuel</span> <span class="pl-k">!=</span> <span class="pl-s"><span class="pl-pds">"</span>Coal<span class="pl-pds">"</span></span>)
-  <span class="pl-smi">co2_kwh</span><span class="pl-k">$</span><span class="pl-smi">Fuel</span> <span class="pl-k">&lt;-</span> str_trim(as.character(<span class="pl-smi">co2_kwh</span><span class="pl-k">$</span><span class="pl-smi">Fuel</span>), <span class="pl-s"><span class="pl-pds">"</span>l<span class="pl-pds">"</span></span>)
-
-  <span class="pl-c"># kWh per Mile</span>
-  <span class="pl-smi">elec_merged_trim</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">elec_merged_trim</span> %<span class="pl-k">&gt;</span>%
-    mutate(<span class="pl-v">kwh_m</span> <span class="pl-k">=</span> <span class="pl-smi">combE</span> <span class="pl-k">/</span> <span class="pl-c1">100</span>)
-
-  <span class="pl-c"># Combine EV data with CO2 per kWh and convert to grams</span>
-
-  <span class="pl-smi">grams_per_lb</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">453.593</span> <span class="pl-c">## Source: Google</span>
-
-  <span class="pl-smi">elec_merged_trim</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">elec_merged_trim</span> %<span class="pl-k">&gt;</span>%
-    mutate(<span class="pl-v">bit_co2_m</span> <span class="pl-k">=</span> <span class="pl-smi">kwh_m</span><span class="pl-k">*</span><span class="pl-smi">co2_kwh</span><span class="pl-k">$</span>`<span class="pl-smi">Pounds</span> <span class="pl-smi">of</span> <span class="pl-smi">CO2</span> <span class="pl-smi">per</span> <span class="pl-smi">kWh</span>`[<span class="pl-c1">1</span>]<span class="pl-k">*</span><span class="pl-smi">grams_per_lb</span>,
-           <span class="pl-v">subbit_co2_m</span> <span class="pl-k">=</span> <span class="pl-smi">kwh_m</span><span class="pl-k">*</span><span class="pl-smi">co2_kwh</span><span class="pl-k">$</span>`<span class="pl-smi">Pounds</span> <span class="pl-smi">of</span> <span class="pl-smi">CO2</span> <span class="pl-smi">per</span> <span class="pl-smi">kWh</span>`[<span class="pl-c1">2</span>]<span class="pl-k">*</span><span class="pl-smi">grams_per_lb</span>,
-           <span class="pl-v">lig_co2_m</span> <span class="pl-k">=</span> <span class="pl-smi">kwh_m</span><span class="pl-k">*</span><span class="pl-smi">co2_kwh</span><span class="pl-k">$</span>`<span class="pl-smi">Pounds</span> <span class="pl-smi">of</span> <span class="pl-smi">CO2</span> <span class="pl-smi">per</span> <span class="pl-smi">kWh</span>`[<span class="pl-c1">3</span>]<span class="pl-k">*</span><span class="pl-smi">grams_per_lb</span>,
-           <span class="pl-v">ng_co2_m</span> <span class="pl-k">=</span> <span class="pl-smi">kwh_m</span><span class="pl-k">*</span><span class="pl-smi">co2_kwh</span><span class="pl-k">$</span>`<span class="pl-smi">Pounds</span> <span class="pl-smi">of</span> <span class="pl-smi">CO2</span> <span class="pl-smi">per</span> <span class="pl-smi">kWh</span>`[<span class="pl-c1">4</span>]<span class="pl-k">*</span><span class="pl-smi">grams_per_lb</span>,
-           <span class="pl-v">fo2_co2_m</span> <span class="pl-k">=</span> <span class="pl-smi">kwh_m</span><span class="pl-k">*</span><span class="pl-smi">co2_kwh</span><span class="pl-k">$</span>`<span class="pl-smi">Pounds</span> <span class="pl-smi">of</span> <span class="pl-smi">CO2</span> <span class="pl-smi">per</span> <span class="pl-smi">kWh</span>`[<span class="pl-c1">5</span>]<span class="pl-k">*</span><span class="pl-smi">grams_per_lb</span>,
-           <span class="pl-v">fo6_co2_m</span> <span class="pl-k">=</span> <span class="pl-smi">kwh_m</span><span class="pl-k">*</span><span class="pl-smi">co2_kwh</span><span class="pl-k">$</span>`<span class="pl-smi">Pounds</span> <span class="pl-smi">of</span> <span class="pl-smi">CO2</span> <span class="pl-smi">per</span> <span class="pl-smi">kWh</span>`[<span class="pl-c1">6</span>]<span class="pl-k">*</span><span class="pl-smi">grams_per_lb</span>)
-</pre></div>
-
 <p>Now that we have the data set of EVs combined with various levels of CO2 intensity for different fuel types, let's graph the data and see how the fuels compare on an emission standpoint.</p>
-
-<div class="highlight highlight-source-r"><pre>  <span class="pl-c"># Graph CO2 per Mile for EVs for each </span>
-  <span class="pl-smi">elec_merged_trim</span> %<span class="pl-k">&gt;</span>%
-    ggplot(aes(<span class="pl-v">x</span><span class="pl-k">=</span><span class="pl-smi">year</span>)) <span class="pl-k">+</span>
-    geom_smooth(aes(<span class="pl-v">y</span><span class="pl-k">=</span><span class="pl-smi">bit_co2_m</span>, <span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Bituminous<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    geom_smooth(aes(<span class="pl-v">y</span><span class="pl-k">=</span><span class="pl-smi">subbit_co2_m</span>, <span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Subbituminous<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    geom_smooth(aes(<span class="pl-v">y</span><span class="pl-k">=</span><span class="pl-smi">lig_co2_m</span>, <span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Lignite<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    geom_smooth(aes(<span class="pl-v">y</span><span class="pl-k">=</span><span class="pl-smi">ng_co2_m</span>, <span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Natural Gas<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    geom_smooth(aes(<span class="pl-v">y</span><span class="pl-k">=</span><span class="pl-smi">fo2_co2_m</span>, <span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Fuel Oil No. 2<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    geom_smooth(aes(<span class="pl-v">y</span><span class="pl-k">=</span><span class="pl-smi">fo6_co2_m</span>, <span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Fuel Oil No. 6<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    scale_color_manual(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>, 
-                       <span class="pl-v">breaks</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>Bituminous<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Subbituminous<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Lignite<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Natural Gas<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Fuel Oil No. 2<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Fuel Oil No. 6<span class="pl-pds">"</span></span>),
-                       <span class="pl-v">values</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>brown<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>darkgreen<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>black<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>blue<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>orange<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    ylab(<span class="pl-s"><span class="pl-pds">"</span>Grams Per Mile<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    xlab(<span class="pl-s"><span class="pl-pds">"</span>Year<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ggtitle(<span class="pl-s"><span class="pl-pds">"</span>CO2 per Mile for EVs by Electricity Source<span class="pl-pds">"</span></span>)
-  ggsave(<span class="pl-s"><span class="pl-pds">"</span>co2_mile_evs.png<span class="pl-pds">"</span></span>)
-</pre></div>
 
 <p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/co2_mile_evs.png" alt="CO2 per Mile EV"></p>
 
@@ -411,22 +193,6 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
 
 <h2>
 <a id="compare-co2-per-mile-of-ice-and-evs" class="anchor" href="#compare-co2-per-mile-of-ice-and-evs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Compare CO2 Per Mile of ICE and EVs</h2>
-
-<div class="highlight highlight-source-r"><pre>
-  <span class="pl-c"># Comparison of CO2 per Mile</span>
-  ggplot()<span class="pl-k">+</span>
-    geom_smooth(aes(<span class="pl-v">x</span><span class="pl-k">=</span><span class="pl-smi">ice_comparable_trim</span><span class="pl-k">$</span><span class="pl-smi">year</span>, <span class="pl-v">y</span><span class="pl-k">=</span><span class="pl-smi">ice_comparable_trim</span><span class="pl-k">$</span><span class="pl-smi">co2TailpipeGpm</span>, <span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>ICE Vehicles<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    geom_smooth(aes(<span class="pl-v">x</span><span class="pl-k">=</span><span class="pl-smi">elec_merged_trim</span><span class="pl-k">$</span><span class="pl-smi">year</span>, <span class="pl-v">y</span><span class="pl-k">=</span><span class="pl-smi">elec_merged_trim</span><span class="pl-k">$</span><span class="pl-smi">bit_co2_m</span>, <span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>EV (Bituminous)<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    geom_smooth(aes(<span class="pl-v">x</span><span class="pl-k">=</span><span class="pl-smi">elec_merged_trim</span><span class="pl-k">$</span><span class="pl-smi">year</span>, <span class="pl-v">y</span><span class="pl-k">=</span><span class="pl-smi">elec_merged_trim</span><span class="pl-k">$</span><span class="pl-smi">fo2_co2_m</span>, <span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>EV (FO2)<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    geom_smooth(aes(<span class="pl-v">x</span><span class="pl-k">=</span><span class="pl-smi">elec_merged_trim</span><span class="pl-k">$</span><span class="pl-smi">year</span>, <span class="pl-v">y</span><span class="pl-k">=</span><span class="pl-smi">elec_merged_trim</span><span class="pl-k">$</span><span class="pl-smi">ng_co2_m</span>, <span class="pl-v">color</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>EV (NG)<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    scale_color_manual(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>,
-                       <span class="pl-v">breaks</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>ICE Vehicles<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>EV (Bituminous)<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>EV (FO2)<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>EV (NG)<span class="pl-pds">"</span></span>),
-                       <span class="pl-v">values</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>brown<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>orange<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>blue<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>black<span class="pl-pds">"</span></span>)) <span class="pl-k">+</span>
-    xlab(<span class="pl-s"><span class="pl-pds">"</span>Year<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ylab(<span class="pl-s"><span class="pl-pds">"</span>Grams per Mile<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-    ggtitle(<span class="pl-s"><span class="pl-pds">"</span>Comparison of CO2 Emissions per Mile Over Time<span class="pl-pds">"</span></span>)
-  ggsave(<span class="pl-s"><span class="pl-pds">"</span>ice_ev_co2_mile.png<span class="pl-pds">"</span></span>)
-</pre></div>
 
 <p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/ice_ev_co2_mile.png" alt="CO2 per Mile EVs vs ICE Compare"></p>
 
@@ -454,25 +220,6 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
 <p>With this model specification, I might expect $\beta_{1}$ to be negative, $\beta_{2}$ to be positive, $\beta_{3}$ to be positive, $\beta_{4}$ to be negative, and $\beta_{5}$ to be positive. In other words, high sticker prices for EVs and higher electricity prices would lead to a decreased demand for EVs while increase sticker price for ICE vehicles, increased gas prices, and increased charging options would lead to increased demand for EVs. Without the data, it is difficult to estimate the magnitude of each effect, but it might be reasonable to expect that the sticker price of EVs and ICE vehicles $\beta_{1}$ and $\beta_{2}$ would have the largest impact.</p>
 
 <p>Other potential variables that would be interesting to include in the analysis could be the average range of EVs, a dummy variable indicating whether an EV manufacturer has indicated that a longer range version of the car is close - just as Nissan CEO Carlos Ghosn indicated in 2014 which may have lead to lower volume sales in 2015.<sup>5</sup></p>
-
-<h3>
-<a id="hypothetical-r-coded-model" class="anchor" href="#hypothetical-r-coded-model" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Hypothetical R Coded Model</h3>
-
-<p>In the absence of actual data to perform the above regression analysis, I will present sample R code to show my thought processes and demonstrate my ability to code these issues in the R language. For knitting purposes, I will comment-out the code.</p>
-
-<div class="highlight highlight-source-r"><pre>
-<span class="pl-c">#   # Load the broom library</span>
-<span class="pl-c">#   library(broom)</span>
-<span class="pl-c">#   </span>
-<span class="pl-c">#   # Speficify the regression model</span>
-<span class="pl-c">#   model &lt;- lm(EVSales ~ EVPrice + ICEPrice + GasPrice + ElecPrice + ChargingStations, dataSet)</span>
-<span class="pl-c"># </span>
-<span class="pl-c">#   # Turns output from the regression model into a useable dataframe</span>
-<span class="pl-c">#   tidy(model)</span>
-<span class="pl-c">#   </span>
-<span class="pl-c">#   # Report the results with confidence intervals for the coefficient values</span>
-<span class="pl-c">#   tidy(model, conf.int = TRUE)</span>
-</pre></div>
 
 <h1>
 <a id="sources-1" class="anchor" href="#sources-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sources</h1>
