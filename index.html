@@ -19,7 +19,16 @@
     </section>
 
     <section class="main-content">
-      <h1>
+      <hr>
+
+<p>title: "Project Website: Measuring the Cost Savings and Environmental Benefits of Operating an Electric Vehicle"
+author: "Nicholas Franco III"
+date: "May 4, 2016"</p>
+
+<h2>
+<a id="output-html_document" class="anchor" href="#output-html_document" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>output: html_document</h2>
+
+<h1>
 <a id="overview-and-motivation" class="anchor" href="#overview-and-motivation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Overview and Motivation</h1>
 
 <p><em>"The time is right for electric cars - in fact the time is critical."</em> - Carlos Ghosn</p>
@@ -142,6 +151,8 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
   ggsave(<span class="pl-s"><span class="pl-pds">"</span>price_of_gas.png<span class="pl-pds">"</span></span>)
 </pre></div>
 
+<p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/price_of_gas.png" alt="Price of Gas"></p>
+
 <p>The chart above shows that gasoline prices were relatively low through the 1980s and 90s and began to climb in the early 2000s until peaking in 2012. Since 2012 prices have been on a decline.</p>
 
 <p>Now let's turn to the efficiency of all ICE vehicles as measured in miles per gallon (mpg) as the data is available in our <code>vehicles</code> data set, excluding electric cars.</p>
@@ -160,6 +171,8 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
   ggsave(<span class="pl-s"><span class="pl-pds">"</span>mpg_all_models.png<span class="pl-pds">"</span></span>)
 </pre></div>
 
+<p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/mpg_all_models.png" alt="MPG for ICE Vehicles"></p>
+
 <p>We can see that efficiency for all ICE vehicles has increased slightly over the most recent 5 years or so after remaining relatively steady for most of the previous 20 years.</p>
 
 <div class="highlight highlight-source-r"><pre>  <span class="pl-c"># Dollars per Mile</span>
@@ -176,6 +189,8 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
     ggtitle(<span class="pl-s"><span class="pl-pds">"</span>Internal Combustion Engine Cost per Mile (Cents per Mile)<span class="pl-pds">"</span></span>)
   ggsave(<span class="pl-s"><span class="pl-pds">"</span>ice_cents_per_mile_all.png<span class="pl-pds">"</span></span>)
 </pre></div>
+
+<p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/ice_cents_per_mile_all.png" alt="Cost per Mile ICE"></p>
 
 <p>We can see in the chart that the gas prices have an obvious impact on the cost to drive an ICE vehicle particularly in the 2000s even though this time period coincides with an increased efficiency in ICE vehicles.  That increased efficiency effect can be seen in the graph as the cost impact of driving a mile is not as drastic as the graph of the gasoline prices. </p>
 
@@ -210,6 +225,8 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
   ggsave(<span class="pl-s"><span class="pl-pds">"</span>elec_prices.png<span class="pl-pds">"</span></span>)
 </pre></div>
 
+<p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/elec_prices.png" alt="Electricity Price"></p>
+
 <p>The chart above shows a generally constant increase in electricity prices over the period increasing from less than eight cents per kWh to more than 10 cents per kWh.</p>
 
 <p>Now let's turn to the data available in the <code>vehicles</code> data set. The data set has information on the efficiency of electric vehicles measured as kWh/100 miles, which can be converted into the second variable in our equation; $\frac{kWh}{mile}$. </p>
@@ -228,6 +245,8 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
     ggtitle(<span class="pl-s"><span class="pl-pds">"</span>Electric Vehicle Killowatthours per 100 Miles<span class="pl-pds">"</span></span>)
   ggsave(<span class="pl-s"><span class="pl-pds">"</span>kwh_mile.png<span class="pl-pds">"</span></span>)
 </pre></div>
+
+<p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/kwh_mile.png" alt="KWh per Mile"></p>
 
 <p>We can see in the graph above that overtime, the efficiency of electric vehicles has improved considerably.</p>
 
@@ -248,6 +267,8 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
   ggsave(<span class="pl-s"><span class="pl-pds">"</span>cents_per_mile_ev.png<span class="pl-pds">"</span></span>)
 </pre></div>
 
+<p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/cents_per_mile_ev.png" alt="Cost per Mile EV"></p>
+
 <p>Combining the cost of electricity with the efficiency of electric vehicles shows a relatively stable cost per mile for EVs with the increasing cost of electricity somewhat offsetting the gains in efficiency.</p>
 
 <h3>
@@ -267,6 +288,8 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
     ggtitle(<span class="pl-s"><span class="pl-pds">"</span>Comparison of Electric and ICE Cars by Cost per Mile<span class="pl-pds">"</span></span>)
   ggsave(<span class="pl-s"><span class="pl-pds">"</span>ev_ice_cost_per_mile_all.png<span class="pl-pds">"</span></span>)
 </pre></div>
+
+<p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/ev_ice_cost_per_mile_all.png" alt="Cost per Mile Compare EV vs. ICE"></p>
 
 <p>As we can see, on a purely cost per mile basis, the electric vehicles win out, particularly in the most recent years. However, the trend we notices is that the relative value of an electric vehicle on a per mile basis is largely dependent on gas prices. Should gas prices return to their 1990s era levels, the relative benefit of EVs per mile is much less consequential.</p>
 
@@ -310,6 +333,8 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
   ggsave(<span class="pl-s"><span class="pl-pds">"</span>cost_per_mile_ice_by_group.png<span class="pl-pds">"</span></span>)
 </pre></div>
 
+<p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/cost_per_mile_ice_by_group.png" alt="Cost per Mile ICE by Vehicle Class"></p>
+
 <p>As we can see, there is some savings from comparing only the ICE vehicle classes that have an EV equivalent.  This is generally due to the types of trucks and heavy duty vehicles that tend to be less fuel efficient and at this point do not have EV counterparts.</p>
 
 <p>Let's now compare the narrowest group of vehicle classes to present the most conservative comparison between ICE vehicles and EVs.</p>
@@ -327,6 +352,8 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
     ggtitle(<span class="pl-s"><span class="pl-pds">"</span>Comparison of Electric and ICE Cars by Cost per Mile Comparing Same Vehicle Classes<span class="pl-pds">"</span></span>)
  ggsave(<span class="pl-s"><span class="pl-pds">"</span>evs_ice_cost_per_mile_trimmed.png<span class="pl-pds">"</span></span>)
 </pre></div>
+
+<p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/evs_ice_cost_per_mile_trimmed.png" alt="Cost per Mile Compare EV ICE trimmed"></p>
 
 <p>Even when we directly compare vehicle classes, electric vehicles are less costly to operate per mile driven, especially in the period of high gasoline prices as was seen through out the first decade of the century. </p>
 
@@ -353,6 +380,8 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
     ggtitle(<span class="pl-s"><span class="pl-pds">"</span>CO2 per Mile for Comparable Class ICE Vehicles<span class="pl-pds">"</span></span>)
   ggsave(<span class="pl-s"><span class="pl-pds">"</span>co2_per_mile_ice.png<span class="pl-pds">"</span></span>)
 </pre></div>
+
+<p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/co2_per_mile_ice.png" alt="CO2 per Mile ICE"></p>
 
 <p>We can see in the chart above that comparable ICE vehicles have remained fairly steady in their emissions per mile driven over the last thirty years. However, we have seem that in the last five years a slight improvement in tailpipe emissions.</p>
 
@@ -407,6 +436,8 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
   ggsave(<span class="pl-s"><span class="pl-pds">"</span>co2_mile_evs.png<span class="pl-pds">"</span></span>)
 </pre></div>
 
+<p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/co2_mile_evs.png" alt="CO2 per Mile EV"></p>
+
 <p>First we notice the same general decline over time that reflects the improved efficiency in EVs over time. The next thing we notice are three distinct groupings of fuel types: coal, oil, and natural gas. We see that the three coal types are grouped together as the most CO2 intensive fuel feed-stock for electricity generating units. The coal units are followed by the two types of oil units and lastly by natural gas, which sits much lower than the other fuel types. </p>
 
 <p>Let's now compare these CO2 intensity trends to the CO2 emissions per mile from ICE vehicles. For simplicity, I have chosen to only present the most carbon intensive electricity source for each of the three groupings described above.</p>
@@ -429,6 +460,8 @@ Unfortunately, some data that would be quite interesting, useful and relevant fo
     ggtitle(<span class="pl-s"><span class="pl-pds">"</span>Comparison of CO2 Emissions per Mile Over Time<span class="pl-pds">"</span></span>)
   ggsave(<span class="pl-s"><span class="pl-pds">"</span>ice_ev_co2_mile.png<span class="pl-pds">"</span></span>)
 </pre></div>
+
+<p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/ice_ev_co2_mile.png" alt="CO2 per Mile EVs vs ICE Compare"></p>
 
 <p>We can see from this graph that the efficiencies gained overtime in the kWh/mile have helped bring the CO2 intensity of a mile of EV driving below that of a mile of ICE vehicle driving. </p>
 
