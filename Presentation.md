@@ -3,38 +3,81 @@ Measuring the Cost Savings and Environmental Benefits of Operating an Electric V
 author: Nicholas Franco III
 date: May 6, 2016
 
-First Slide
+Overview
 ========================================================
 
-For more details on authoring R presentations click the
-**Help** button on the toolbar.
+The analysis will compare electric vehicles (EVs) and traditional internal combustion engine (ICE) vehicles on two metrics:
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
+- Cost to Operate per Mile
+- CO2 Emissions per Mile
 
-Slide With Code
+Background and Motivation
 ========================================================
 
 
-```r
-summary(cars)
-```
+The market for electric vehicles in the U.S. is growing rapidly driven by high gas prices, more comprehensive available electric charging infrastructure and increasingly compelling electric car alternatives. 
 
-```
-     speed           dist       
- Min.   : 4.0   Min.   :  2.00  
- 1st Qu.:12.0   1st Qu.: 26.00  
- Median :15.0   Median : 36.00  
- Mean   :15.4   Mean   : 42.98  
- 3rd Qu.:19.0   3rd Qu.: 56.00  
- Max.   :25.0   Max.   :120.00  
-```
+![US EV Sales](https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/US_EV_Sales.png)
 
-Slide With Plot
+Cost per Mile (ICE Vehicle)
 ========================================================
 
-![plot of chunk unnamed-chunk-2](Presentation-figure/unnamed-chunk-2-1.png)
+![Price of Gas](https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/price_of_gas.png)
 
-Nick Slide
+
+Cost per Mile (ICE Vehicle)
 ========================================================
+
+![MPG for ICE Vehicles](https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/mpg_all_models.png)
+
+Cost per Mile (ICE Vehicle)
+========================================================
+
+![Cost per Mile ICE](https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/ice_cents_per_mile_all.png)
+
+
+Cost per Mile (EV)
+========================================================
+
+![Electricity Price](https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/elec_prices.png)
+
+Cost per Mile (EV)
+========================================================
+
+![KWh per Mile](https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/kwh_mile.png)
+
+Cost per Mile (EV)
+========================================================
+
+![Cost per Mile EV](https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/cents_per_mile_ev.png)
+
+
+Cost per Mile (EVs vs. ICE Vehicles)
+========================================================
+
+![Cost per Mile Compare EV ICE trimmed](https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/evs_ice_cost_per_mile_trimmed.png)
+
+CO2 per Mile: Overview
+========================================================
+
+While traditional ICE vehicles are well understood to emit carbon dioxide (CO2) in the form of tailpipe emissions, it is not so straightforward to think about emissions resulting from EVs. While EVs themselves don't emit CO2 while driving, they are responsible for CO2 emissions resulting from the 
+
+CO2 per Mile: ICE Vehicles
+========================================================
+
+![CO2 per Mile ICE](https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/co2_per_mile_ice.png)
+
+CO2 per Mile: EVs
+========================================================
+
+![CO2 per Mile EV](https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/co2_mile_evs.png)
+
+CO2 per Mile: EVs
+========================================================
+
+![CO2 per Mile EVs vs ICE Compare](https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/ice_ev_co2_mile.png)
+
+Thank You
+========================================================
+
+
