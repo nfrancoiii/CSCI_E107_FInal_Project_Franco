@@ -49,30 +49,6 @@
 
 <p>Electric car sales in the United States and globally have begun to take off as companies like Tesla have made great strides in removing the two largest barriers to EV ownership: range and infrastructure. Electric cars are now approaching 300 miles of range on a single charge and the industry expects advancements over the next decade may make electric vehicles more appealing that gasoline cars.  Additionally, private companies have taken on expanding the network of electric charging stations. As such, we have seen the number of EV sales ramp up with no signs of slowing as can be seen in the bar chart below.</p>
 
-<div class="highlight highlight-source-r"><pre>
-  <span class="pl-c"># U.S. Electric Car Sales</span>
-    <span class="pl-smi">temp</span> <span class="pl-k">&lt;-</span> tempfile()
-    download.file(<span class="pl-s"><span class="pl-pds">"</span>http://www.afdc.energy.gov/uploads/data/data_source/10567/10567_pev_sales.xlsx<span class="pl-pds">"</span></span>, <span class="pl-smi">temp</span>, <span class="pl-v">mode</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>wb<span class="pl-pds">"</span></span>)
-    <span class="pl-smi">ev_sales</span> <span class="pl-k">&lt;-</span> read.xlsx(<span class="pl-s"><span class="pl-pds">"</span>10567_pev_sales.xlsx<span class="pl-pds">"</span></span>, <span class="pl-v">sheetIndex</span><span class="pl-k">=</span><span class="pl-c1">1</span>, <span class="pl-v">startRow</span> <span class="pl-k">=</span> <span class="pl-c1">3</span>)
-
-    <span class="pl-c"># Clean Data</span>
-    names(<span class="pl-smi">ev_sales</span>)[<span class="pl-c1">1</span>] <span class="pl-k">&lt;-</span> <span class="pl-s"><span class="pl-pds">"</span>Model<span class="pl-pds">"</span></span>
-    <span class="pl-smi">ev_sales</span> <span class="pl-k">&lt;-</span> melt(<span class="pl-smi">ev_sales</span>, <span class="pl-v">id</span><span class="pl-k">=</span>c(<span class="pl-s"><span class="pl-pds">"</span>Model<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Type<span class="pl-pds">"</span></span>)) %<span class="pl-k">&gt;</span>%
-      filter(<span class="pl-smi">value</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>) %<span class="pl-k">&gt;</span>%
-      filter(<span class="pl-smi">Model</span> <span class="pl-k">!=</span> <span class="pl-s"><span class="pl-pds">"</span>Total<span class="pl-pds">"</span></span>) %<span class="pl-k">&gt;</span>%
-      filter(<span class="pl-smi">variable</span> <span class="pl-k">!=</span> <span class="pl-s"><span class="pl-pds">"</span>TOTAL<span class="pl-pds">"</span></span>)
-      <span class="pl-smi">ev_sales</span><span class="pl-k">$</span><span class="pl-smi">variable</span> <span class="pl-k">&lt;-</span> gsub(<span class="pl-s"><span class="pl-pds">"</span>X<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>, as.character(<span class="pl-smi">ev_sales</span><span class="pl-k">$</span><span class="pl-smi">variable</span>))
-      <span class="pl-smi">ev_sales</span><span class="pl-k">$</span><span class="pl-smi">variable</span> <span class="pl-k">&lt;-</span> as.numeric(<span class="pl-smi">ev_sales</span><span class="pl-k">$</span><span class="pl-smi">variable</span>)
-    names(<span class="pl-smi">ev_sales</span>)[<span class="pl-c1">3</span>] <span class="pl-k">&lt;-</span> <span class="pl-s"><span class="pl-pds">"</span>Year<span class="pl-pds">"</span></span>
-    names(<span class="pl-smi">ev_sales</span>)[<span class="pl-c1">4</span>] <span class="pl-k">&lt;-</span> <span class="pl-s"><span class="pl-pds">"</span>Sales<span class="pl-pds">"</span></span>
-
-    <span class="pl-c"># Stacked Bar Chart</span>
-    <span class="pl-smi">ev_sales</span> %<span class="pl-k">&gt;</span>%
-      ggplot(aes(<span class="pl-v">x</span><span class="pl-k">=</span><span class="pl-smi">Year</span>, <span class="pl-v">y</span><span class="pl-k">=</span><span class="pl-smi">Sales</span>, <span class="pl-v">fill</span><span class="pl-k">=</span><span class="pl-smi">Model</span>)) <span class="pl-k">+</span>
-      geom_bar(<span class="pl-v">stat</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>identity<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
-      ggtitle(<span class="pl-s"><span class="pl-pds">"</span>US EV Sales<span class="pl-pds">"</span></span>)
-    ggsave(<span class="pl-s"><span class="pl-pds">"</span>US_EV_Sales.png<span class="pl-pds">"</span></span>)</pre></div>
-
 <p><img src="https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/US_EV_Sales.png" alt="US EV Sales"></p>
 
 <p>With the EV market's rapid rise, many articles have been popping up to attempt to compare the costs of electric vehicles and traditional ICE vehicles. One such example from dailyfinance.com explored the full cost of comparable cars and considered the "at the pump" cost for each.<sup>2</sup> A study from the Idaho National Laboratory also attempts to show estimates of the cost per mile for electric vehicles and ICE vehicles of different efficiencies.<sup>3</sup></p>
