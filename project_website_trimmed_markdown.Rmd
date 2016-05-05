@@ -1,5 +1,5 @@
 ---
-title: "Measuring the Cost Savings and Environmental Benefits of Operating an Electric Vehicle"
+title: "Project Website: Measuring the Cost Savings and Environmental Benefits of Operating an Electric Vehicle"
 author: "Nicholas Franco III"
 date: "May 4, 2016"
 output: html_document
