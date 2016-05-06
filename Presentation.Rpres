@@ -54,11 +54,6 @@ Cost per Mile: EVs
 
 ![KWh per Mile](https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/kwh_mile.png)
 
-Cost per Mile: EVs
-========================================================
-
-![Cost per Mile EV](https://raw.githubusercontent.com/nfrancoiii/CSCI_E107_FInal_Project_Franco/master/cents_per_mile_ev.png)
-
 
 Cost per Mile: EVs vs. ICE Vehicles
 ========================================================
